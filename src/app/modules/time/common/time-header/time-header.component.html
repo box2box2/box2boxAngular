@@ -1,0 +1,18 @@
+<app-header>
+  @for (action of actions; track action.id) {
+    <div (click)="clickAction.emit(action)" matRipple>
+      <mat-icon>{{ action.icon }}</mat-icon>
+      <h3 class="mat-label-large">{{ action.label }}</h3>
+    </div>
+  }
+  <mat-divider [vertical]="true"></mat-divider>
+  <div class="flex-spacer"></div>
+  <div [routerLink]="['/']" matRipple>
+    <mat-icon>dashboard</mat-icon>
+    <h3 class="mat-label-large">Dashboard</h3>
+  </div>
+  <div (click)="logout()" matRipple>
+    <mat-icon>logout</mat-icon>
+    <h3 class="mat-label-large">Uitloggen</h3>
+  </div>
+</app-header>

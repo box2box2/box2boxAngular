@@ -1,0 +1,18 @@
+.active-link {
+  background-color: var(--sys-primary-container); // zacht groen
+  color: var(--sys-on-primary-container); // contrasterende tekst
+  font-weight: 600;
+  border-left: 4px solid var(--sys-primary); // groene strook links
+  border-radius: 8px;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+
+  .mat-icon {
+    color: var(--sys-primary);
+  }
+
+  &:hover {
+    background-color: var(--sys-surface-container-high);
+  }
+}

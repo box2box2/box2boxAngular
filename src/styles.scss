@@ -1,0 +1,113 @@
+@use '@angular/material' as mat;
+@use './stylesm3-theme.scss' as stylesm3-theme;
+
+@include mat.elevation-classes();
+@include mat.app-background();
+
+$theme: mat.define-theme();
+
+html {
+  @include mat.elevation-classes();
+  @include mat.app-background();
+  @include mat.all-component-themes(stylesm3-theme.$light-theme);
+  @include mat.typography-hierarchy(stylesm3-theme.$light-theme);
+
+  body {
+    margin: 0;
+    padding: 0;
+
+
+    button.mat-mdc-button.mat-warn,
+    button.mat-mdc-unelevated-button.mat-warn,
+    button.mat-mdc-raised-button.mat-warn {
+      background-color: var(--sys-error) !important;
+      color: var(--sys-on-error) !important;
+    }
+
+    mat-icon.mat-warn {
+      color: var(--sys-error) !important;
+    }
+
+    .mat-mdc-snack-bar-container.mat-warn {
+      background-color: var(--sys-error) !important;
+      color: var(--sys-on-error) !important;
+    }
+
+    .mat-mdc-checkbox.mat-warn .mdc-checkbox__background,
+    .mat-mdc-radio-button.mat-warn .mdc-radio__background {
+      border-color: var(--sys-error) !important;
+      background-color: var(--sys-error) !important;
+    }
+
+    .mat-mdc-badge.mat-warn {
+      background-color: var(--sys-error) !important;
+      color: var(--sys-on-error) !important;
+    }
+
+    .snackbar-warning {
+      background-color: var(--sys-error-container) !important;
+      color: var(--sys-on-error-container) !important;
+    }
+
+    .snackbar-error {
+      background-color: var(--sys-error) !important;
+      color: var(--sys-on-error) !important;
+    }
+
+    .flex-spacer {
+      flex: 1;
+    }
+
+    .snackbar-success {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    .snackbar-warning {
+      background-color: #ff9800;
+      color: white;
+    }
+
+    .snackbar-error {
+      background-color: #f44336;
+      color: white;
+    }
+  }
+
+  /* Scrollbar styles for WebKit browsers */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    /* Width of the entire scrollbar */
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--sys-primary);
+    /* Color of the scrollbar thumb */
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--sys-primary);
+    /* Color of the scrollbar thumb when hovered */
+  }
+
+  /* Scrollbar styles for Edge and IE */
+  ::-ms-scrollbar {
+    width: 8px;
+    height: 8px;
+
+  }
+
+
+
+  ::-ms-scrollbar-thumb {
+    background-color: var(--sys-primary);
+    border-radius: 10px;
+  }
+
+  ::-ms-scrollbar-thumb:hover {
+    background: var(--sys-primary);
+  }
+
+}

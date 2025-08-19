@@ -1,0 +1,104 @@
+<div class="content-wrapper">
+  <mat-form-field class="search-field" appearance="fill">
+    <mat-icon matPrefix>search</mat-icon>
+    <mat-label>Zoeken</mat-label>
+    <input
+      (keydown)="handleKey($event)"
+      matInput
+      type="search"
+      (keyup)="applyFilter($event)"
+      [formControl]="searchControl"
+      (focusin)="showKeyboard(searchControl, 'search')"
+      (focusout)="maybeHideKeyboard($event)"
+    />
+  </mat-form-field>
+  <div class="table-container">
+    <table mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="OperatorNumber">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Medewerker</th>
+        <td mat-cell *matCellDef="let obj">{{ obj.Account.Number }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="OperatorName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Naam</th>
+        <td mat-cell *matCellDef="let obj">{{ obj.Account.Name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="Status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <td mat-cell *matCellDef="let obj">{{ obj.EmployeeButtonStatus ?? 'ONBEKEND' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="Color">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Kleur</th>
+        <td mat-cell *matCellDef="let obj">
+          <div class="color-box" [style.background-color]="obj.Account.Color"></div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Initials">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Initialen</th>
+        <td mat-cell *matCellDef="let obj">{{ obj.Account.Initials ?? 'ONBEKEND' }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr
+        [ngClass]="{ active: selectedEmployee?.Account?.Name === row.Account.Name }"
+        class="clickable-row"
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        (click)="selectRow(row)"
+      ></tr>
+    </table>
+  </div>
+  <mat-paginator [length]="resultsLength" [pageSize]="30" aria-label="Select page of results"></mat-paginator>
+  <mat-toolbar class="status-toolbar" *ngIf="this.dataSource.data.length > 0">
+    @for (status of statuses; track $index) {
+      <button
+        mat-raised-button
+        [ngClass]="{ 'error-button': $index === 1, active: selectedStatus?.Description === status.Description }"
+        class="status"
+        (click)="changeStatus(status)"
+      >
+        {{ status.Description }}
+      </button>
+    }
+  </mat-toolbar>
+
+  <!-- <div class="button-group" *ngIf="this.dataSource.data.length > 0">
+    @for (button of buttons; track button.id) {
+      <button
+        mat-stroked-button
+        [ngClass]="{
+          active: button.Status.Key === '100',
+          inactive: button.Status.Key !== '100',
+          disabled: button.Status.Key === '100'
+        }"
+        class="slot"
+        [disabled]="button.Status.Key === '100'"
+        (click)="setUserSlot(button)"
+      >
+        {{ button.Description }}
+        @if (button.Status.Key === '100') {
+          <span> - {{ getEmployeeOnSlot(button) }} </span>
+        }
+      </button>
+    }
+  </div> -->
+
+  @if (loading) {
+    <div class="loading-overlay">
+      <mat-spinner></mat-spinner>
+    </div>
+  }
+</div>
+
+<app-keyboard
+  *ngIf="keyboardVisible"
+  [open]="keyboardVisible"
+  (openChange)="keyboardVisible = $event"
+  (oKeyboard)="onKeyboardEnter($event)"
+  (oValue)="onKeyboardTyping($event)"
+>
+  /></app-keyboard
+>
