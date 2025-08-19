@@ -1,4 +1,4 @@
-<app-header>
+<!-- <app-header>
   <div (click)="fetchData()" matRipple>
     <mat-icon color="primary">refresh</mat-icon>
     <h3 class="mat-label-large">Vernieuwen</h3>
@@ -68,7 +68,6 @@
         </mat-card-content>
       </mat-card>
 
-      <!-- Financieel overzicht -->
       <mat-card class="shop-card">
         <mat-card-title> Financieel overzicht </mat-card-title>
         <mat-card-content>
@@ -97,7 +96,6 @@
     </div>
 
     <div class="charts-container">
-      <!-- Orders Diagram -->
       <div class="left-charts">
         <mat-card class="chart-card">
           <mat-card-content>
@@ -105,7 +103,6 @@
           </mat-card-content>
         </mat-card>
 
-        <!-- Betalingen Diagram -->
         <mat-card class="chart-card">
           <mat-card-content>
             <canvas id="payment-chart"></canvas>
@@ -113,7 +110,6 @@
         </mat-card>
       </div>
 
-      <!-- Orders per Uur Diagram -->
       <mat-card class="chart-card large-chart">
         <mat-card-content>
           <canvas id="bar-chart"></canvas>
@@ -122,38 +118,33 @@
     </div>
   }
 
-  <!-- Verkochte artikelen -->
   @if (backOfficeOrder) {
     <mat-card class="table-card">
       <mat-card-title>Samenvatting verkochte artikelen</mat-card-title>
       <mat-card-content>
         <div class="table-wrapper">
           <table mat-table [dataSource]="itemsSoldDataSource" matSort class="mat-elevation-z8">
-            <!-- Description Column -->
+
             <ng-container matColumnDef="Description">
               <th mat-header-cell *matHeaderCellDef mat-sort-header="Description">Omschrijving</th>
               <td mat-cell *matCellDef="let item">{{ item.Description }}</td>
             </ng-container>
 
-            <!-- Number Column -->
             <ng-container matColumnDef="Number">
               <th mat-header-cell *matHeaderCellDef mat-sort-header="Number">Nummer</th>
               <td mat-cell *matCellDef="let item">{{ item.Number }}</td>
             </ng-container>
 
-            <!-- Quantity Column -->
             <ng-container matColumnDef="Quantity">
               <th mat-header-cell *matHeaderCellDef mat-sort-header="Quantity">Aantal</th>
               <td mat-cell *matCellDef="let item">{{ item.Quantity }} pcs</td>
             </ng-container>
 
-            <!-- Price Column -->
             <ng-container matColumnDef="Price">
               <th mat-header-cell *matHeaderCellDef mat-sort-header="Price">Prijs (per stuk)</th>
               <td mat-cell *matCellDef="let item">{{ item.AmountInclusiveSingular | currency: 'EUR' : 'symbol' : '1.2-2' : 'nl-NL' }}</td>
             </ng-container>
 
-            <!-- Price Exclusive Column -->
             <ng-container matColumnDef="PriceExclusive">
               <th mat-header-cell *matHeaderCellDef mat-sort-header="PriceExclusive">Prijs (Exclusief)</th>
               <td mat-cell *matCellDef="let item">{{ item.AmountExclusiveSingular | currency: 'EUR' : 'symbol' : '1.2-2' : 'nl-NL' }}</td>
@@ -166,19 +157,16 @@
               </td>
             </ng-container>
 
-            <!-- Quantities Prognose Column -->
             <ng-container matColumnDef="Prognose">
               <th mat-header-cell *matHeaderCellDef mat-sort-header="Prognose">Prognose</th>
               <td mat-cell *matCellDef="let item">{{ item.Quantities.Prognose }}</td>
             </ng-container>
 
-            <!-- Quantities Sales Column -->
             <ng-container matColumnDef="Sales">
               <th mat-header-cell *matHeaderCellDef mat-sort-header="Sales">Verkoop</th>
               <td mat-cell *matCellDef="let item">{{ item.Quantities.Sales }}</td>
             </ng-container>
 
-            <!-- Quantities InOrder Column -->
             <ng-container matColumnDef="InOrder">
               <th mat-header-cell *matHeaderCellDef mat-sort-header="InOrder">InOrder</th>
               <td mat-cell *matCellDef="let item">{{ item.Quantities.InOrder }}</td>
@@ -195,37 +183,31 @@
       </mat-card-content>
     </mat-card>
 
-    <!-- Items - sold no -->
     <mat-card class="table-card">
       <mat-card-title>Overzicht niet beschikbare artikelen</mat-card-title>
       <mat-card-content>
         <div class="table-wrapper">
           <table mat-table [dataSource]="stockAlertDataSource" matSort class="mat-elevation-z8">
-            <!-- Description Column -->
             <ng-container matColumnDef="Description">
               <th mat-header-cell *matHeaderCellDef mat-sort-header="Description">Omschrijving</th>
               <td mat-cell *matCellDef="let alert">{{ alert.Description }}</td>
             </ng-container>
 
-            <!-- Number Column -->
             <ng-container matColumnDef="Number">
               <th mat-header-cell *matHeaderCellDef mat-sort-header="Number">Nummer</th>
               <td mat-cell *matCellDef="let alert">{{ alert.Number }}</td>
             </ng-container>
 
-            <!-- Quantity Column -->
             <ng-container matColumnDef="Quantity">
               <th mat-header-cell *matHeaderCellDef mat-sort-header="Quantity">Aantal</th>
               <td mat-cell *matCellDef="let alert">{{ alert.Quantity }} pcs</td>
             </ng-container>
 
-            <!-- Price Column -->
             <ng-container matColumnDef="Price">
               <th mat-header-cell *matHeaderCellDef mat-sort-header="Price">Prijs (per stuk)</th>
               <td mat-cell *matCellDef="let alert">{{ alert.AmountInclusive | currency: 'EUR' : 'symbol' : '1.2-2' : 'nl-NL' }}</td>
             </ng-container>
 
-            <!-- Price Exclusive Column -->
             <ng-container matColumnDef="PriceExclusive">
               <th mat-header-cell *matHeaderCellDef mat-sort-header="PriceExclusive">Prijs (Exclusief)</th>
               <td mat-cell *matCellDef="let alert">{{ alert.PriceExclusive | currency: 'EUR' : 'symbol' : '1.2-2' : 'nl-NL' }}</td>
@@ -238,13 +220,11 @@
               </td>
             </ng-container>
 
-            <!-- Stock Alert Column -->
             <ng-container matColumnDef="StockAlert">
               <th mat-header-cell *matHeaderCellDef mat-sort-header="StockAlert">Niet beschikbaar</th>
               <td mat-cell *matCellDef="let alert">{{ alert.StockAlert }}</td>
             </ng-container>
 
-            <!-- Header & Row Definitions -->
             <tr mat-header-row *matHeaderRowDef="displayedStockAlertColumns"></tr>
             <tr
               mat-row
@@ -257,4 +237,4 @@
       </mat-card-content>
     </mat-card>
   }
-</main>
+</main> -->

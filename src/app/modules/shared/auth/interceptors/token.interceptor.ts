@@ -8,7 +8,7 @@ import {
   HttpRequest,
   HttpResponse,
   HttpSentEvent,
-  HttpUserEvent
+  HttpUserEvent,
 } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, first, switchMap } from 'rxjs/operators';
@@ -22,13 +22,23 @@ export class TokenInterceptor implements HttpInterceptor {
 
   constructor(private _appService: SharedService) {}
 
-  static addTokenToRequest(request: HttpRequest<unknown>, token: string): HttpRequest<unknown> {
+  static addTokenToRequest(
+    request: HttpRequest<unknown>,
+    token: string,
+  ): HttpRequest<unknown> {
     return request.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
   }
   intercept(
     request: HttpRequest<unknown>,
-    next: HttpHandler
-  ): Observable<HttpSentEvent | HttpHeaderResponse | HttpProgressEvent | HttpResponse<unknown> | HttpUserEvent<unknown> | never> {
+    next: HttpHandler,
+  ): Observable<
+    | HttpSentEvent
+    | HttpHeaderResponse
+    | HttpProgressEvent
+    | HttpResponse<unknown>
+    | HttpUserEvent<unknown>
+    | never
+  > {
     if (request.url.includes('/assets/i18n/')) {
       return next.handle(request);
     }
@@ -40,40 +50,42 @@ export class TokenInterceptor implements HttpInterceptor {
       return next.handle(cloned);
     }
 
-    if (request.url.includes(environment.piggyShortUrl)) {
-      const piggyToken = environment.piggyToken;
-      const piggyHeaders = request.headers.set('Authorization', `Bearer ${piggyToken}`).set('Accept', 'application/json');
-      const piggyRequest = request.clone({ headers: piggyHeaders });
-      return next.handle(piggyRequest);
-    }
-
     // --- 2. STANDARD TOKEN FLOW ---
     return this._appService.getLoginResponse().pipe(
       first(),
-      switchMap(loginResponse => {
+      switchMap((loginResponse) => {
         if (!loginResponse?.access_token) {
           // No token at all
           if (window.location.href.includes('/login')) {
             return next.handle(request);
           } else {
             this._appService.logout();
-            return throwError(() => new Error('Session expired. Please log in again.'));
+            return throwError(
+              () => new Error('Session expired. Please log in again.'),
+            );
           }
         }
         // Now check if token is authorized/valid (returns Observable<boolean>)
         return this._appService.isAuthorized().pipe(
           first(),
-          switchMap(isAuth => {
+          switchMap((isAuth) => {
             if (!isAuth) {
               this._appService.logout();
-              return throwError(() => new Error('Session expired. Please log in again.'));
+              return throwError(
+                () => new Error('Session expired. Please log in again.'),
+              );
             }
             // Token is valid, proceed as normal
-            return next.handle(TokenInterceptor.addTokenToRequest(request, loginResponse.access_token));
-          })
+            return next.handle(
+              TokenInterceptor.addTokenToRequest(
+                request,
+                loginResponse.access_token,
+              ),
+            );
+          }),
         );
       }),
-      catchError(err => {
+      catchError((err) => {
         if (err instanceof HttpErrorResponse) {
           switch (err.status) {
             case 404:
@@ -87,7 +99,7 @@ export class TokenInterceptor implements HttpInterceptor {
           }
         }
         return throwError(() => new Error(err.message));
-      })
+      }),
     );
   }
 }

@@ -1,8 +1,8 @@
 <mat-card appearance="outlined" class="mat-typography">
   @if (loggingIn) {
-    <div class="loading-overlay">
-      <mat-spinner></mat-spinner>
-    </div>
+  <div class="loading-overlay">
+    <mat-spinner></mat-spinner>
+  </div>
   }
   <mat-card-header>
     <mat-card-title>
@@ -13,44 +13,28 @@
     <form #loginFormElement [formGroup]="loginForm" (ngSubmit)="login()">
       <mat-form-field appearance="fill">
         <mat-label>Gebruikersnaam</mat-label>
-        <input #usernameInput matInput type="text" formControlName="username" (click)="showKeyboard(usernameControl, 'username')" />
+        <input #usernameInput matInput type="text" formControlName="username" />
 
         @if (loginForm.controls.username.hasError('required')) {
-          <mat-error> Gebruikersnaam vereist </mat-error>
+        <mat-error> Gebruikersnaam vereist </mat-error>
         }
         @if (loginForm.controls.username.hasError('email')) {
-          <mat-error> Ongeldige email </mat-error>
+        <mat-error> Ongeldige email </mat-error>
         }
       </mat-form-field>
 
       <mat-form-field appearance="fill">
         <mat-label>Wachtwoord</mat-label>
-        <input
-          #passwordInput
-          matInput
-          [type]="hide ? 'password' : 'text'"
-          formControlName="password"
-          (click)="showKeyboard(passwordControl, 'password')"
-        />
-        <button type="button" mat-icon-button matSuffix (click)="hide = !hide" aria-label="Hide password" [attr.aria-pressed]="hide">
+        <input #passwordInput matInput [type]="hide ? 'password' : 'text'" formControlName="password" />
+        <button type="button" mat-icon-button matSuffix (click)="hide = !hide" aria-label="Hide password"
+          [attr.aria-pressed]="hide">
           <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
         @if (loginForm.controls.password.hasError('required')) {
-          <mat-error> Gebruikersnaam vereist </mat-error>
+        <mat-error> Gebruikersnaam vereist </mat-error>
         }
       </mat-form-field>
       <button #loginButton mat-flat-button type="submit" [disabled]="!loginForm.valid">Inloggen</button>
     </form>
   </mat-card-content>
 </mat-card>
-
-<app-keyboard
-  *ngIf="keyboardVisible"
-  [open]="keyboardVisible"
-  [targetInputElement]="focusedInput"
-  [initialCaretPosition]="caretPosition"
-  [initialSelectionEnd]="selectionEnd"
-  (openChange)="keyboardVisible = $event"
-  (oKeyboard)="onKeyboardEnter($event || '')"
-  (oEnter)="handleVirtualEnter()"
-/>
