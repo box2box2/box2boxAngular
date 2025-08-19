@@ -28,6 +28,8 @@ import { environment } from '../../../environments/environment';
 import { onKeyEnterFocusNext } from '../../services/key-event-utils';
 import { AppActions } from '../../store/app.actions';
 import { LoginDTO } from '../../modules/shared/models/Login.dto';
+import { AuthService } from '../../modules/shared/http/authService';
+import { AppService } from '../../modules/shared/http/appService';
 
 @Component({
   templateUrl: './login.component.html',
@@ -78,6 +80,8 @@ export class LoginComponent implements OnDestroy, AfterViewInit {
   constructor(
     private _router: Router,
     private _fb: FormBuilder,
+    private _authService: AuthService,
+    private _appService: AppService,
   ) {
     this.loginForm = this._fb.group({
       username: ['', [Validators.required, Validators.email]],
@@ -114,15 +118,14 @@ export class LoginComponent implements OnDestroy, AfterViewInit {
       password: this.loginForm.controls.password?.value as string,
     };
 
-    // TODO login
-    this._appService.dispatchAppAction(
-      AppActions.setToken({ token: loginResult }),
-    );
-
-    this.loggingIn = false;
-
-    this._appService.clearAllStates();
-    this._router.navigate(['/login']);
+    this._authService.login(loginParams).subscribe((loginResult) => {
+      this._appService.dispatchAppAction(
+        AppActions.setToken({ token: loginResult }),
+      );
+      this.loggingIn = false;
+      this._appService.clearAllStates();
+      this._router.navigate(['/login']);
+    });
   }
 
   ngOnDestroy(): void {

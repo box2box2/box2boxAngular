@@ -2,12 +2,16 @@ import { localStorageSync } from 'ngrx-store-localstorage';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
   HTTP_INTERCEPTORS,
+  HttpClient,
   provideHttpClient,
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import { TokenInterceptor } from './modules/shared/auth/interceptors/token.interceptor';
 import { ErrorInterceptor } from './modules/shared/auth/interceptors/error.interceptor';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { ArcElement, Chart, PieController } from 'chart.js';
 
 const encDec = {
   encrypt: Encryptor.encFunction,
@@ -39,11 +43,12 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { appFeature } from './store/app.reducer';
 import { environment } from '../environments/environment';
+import Encryptor from './services/encryptor';
 export interface AppState {
   appState: ReturnType<typeof appFeature.reducer>;
 }
 const reducers: ActionReducerMap<AppState> = {
-  appState: appFeature.reducer
+  appState: appFeature.reducer,
 };
 export function localStorageSyncReducer(
   reducer: ActionReducer<AppState>,

@@ -12,15 +12,14 @@ import {
 } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, first, switchMap } from 'rxjs/operators';
-import { SharedService } from '../../http/shared.service';
-import { environment } from '../../../../../environments/environment';
+import { AppService } from '../../http/appService';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
   isRefreshingToken = false;
   tokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
-  constructor(private _appService: SharedService) {}
+  constructor(private _appService: AppService) {}
 
   static addTokenToRequest(
     request: HttpRequest<unknown>,
