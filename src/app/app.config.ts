@@ -2,28 +2,21 @@ import { localStorageSync } from 'ngrx-store-localstorage';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
   HTTP_INTERCEPTORS,
-  HttpClient,
   provideHttpClient,
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import { TokenInterceptor } from './modules/shared/auth/interceptors/token.interceptor';
 import { ErrorInterceptor } from './modules/shared/auth/interceptors/error.interceptor';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import {
+  TranslateHttpLoader,
+  TRANSLATE_HTTP_LOADER_CONFIG,
+} from '@ngx-translate/http-loader';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ArcElement, Chart, PieController } from 'chart.js';
-
-const encDec = {
-  encrypt: Encryptor.encFunction,
-  decrypt: Encryptor.decFunction,
-};
 
 // Register chart.js elements (do this outside providers)
 Chart.register(PieController, ArcElement);
-
-export function HttpLoaderFactory(): TranslateHttpLoader {
-  return new TranslateHttpLoader();
-}
 
 // MetaReducers with localStorageSync
 import {
@@ -44,12 +37,20 @@ import { routes } from './app.routes';
 import { appFeature } from './store/app.reducer';
 import { environment } from '../environments/environment';
 import Encryptor from './services/encryptor';
+
+const encDec = {
+  encrypt: Encryptor.encFunction,
+  decrypt: Encryptor.decFunction,
+};
+
 export interface AppState {
   appState: ReturnType<typeof appFeature.reducer>;
 }
+
 const reducers: ActionReducerMap<AppState> = {
   appState: appFeature.reducer,
 };
+
 export function localStorageSyncReducer(
   reducer: ActionReducer<AppState>,
 ): ActionReducer<AppState> {
@@ -58,6 +59,7 @@ export function localStorageSyncReducer(
     rehydrate: true,
   })(reducer);
 }
+
 export const metaReducers: Array<MetaReducer<AppState>> = [
   localStorageSyncReducer,
 ];
@@ -99,18 +101,25 @@ export const appConfig: ApplicationConfig = {
       },
     }),
 
-    // Material and custom modules (standalone-friendly)
+    // ✅ New translation loader config (no factory function required)
     importProvidersFrom(
       TranslateModule.forRoot({
         loader: {
           provide: TranslateLoader,
-          useFactory: HttpLoaderFactory,
-          deps: [HttpClient],
+          useClass: TranslateHttpLoader,
         },
       }),
       ServiceWorkerModule.register('ngsw-worker.js', {
         enabled: environment.production,
       }),
     ),
+
+    {
+      provide: TRANSLATE_HTTP_LOADER_CONFIG,
+      useValue: {
+        prefix: './assets/i18n/',
+        suffix: '.json',
+      },
+    },
   ],
 };

@@ -12,7 +12,6 @@ import {
   FormBuilder,
   FormControl,
   FormGroup,
-  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -33,7 +32,7 @@ import { AppService } from '../../modules/shared/http/appService';
 
 @Component({
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
+  styleUrls: ['./login.component.scss'],
   standalone: true,
   imports: [
     CommonModule,
@@ -43,7 +42,6 @@ import { AppService } from '../../modules/shared/http/appService';
     MatIconModule,
     MatButtonModule,
     MatProgressSpinnerModule,
-    FormsModule,
     ReactiveFormsModule,
   ],
   animations: [
@@ -119,12 +117,12 @@ export class LoginComponent implements OnDestroy, AfterViewInit {
     };
 
     this._authService.login(loginParams).subscribe((loginResult) => {
+      this._appService.clearAllStates();
       this._appService.dispatchAppAction(
         AppActions.setToken({ token: loginResult }),
       );
       this.loggingIn = false;
-      this._appService.clearAllStates();
-      this._router.navigate(['/login']);
+      this._router.navigate(['/dashboard']);
     });
   }
 

@@ -1,34 +1,11 @@
-<!-- <app-header>
-  <div (click)="fetchData()" matRipple>
-    <mat-icon color="primary">refresh</mat-icon>
-    <h3 class="mat-label-large">Vernieuwen</h3>
-  </div>
-  <div (click)="onRefreshClick()" matRipple>
-    @switch (signalRService.connectionState$ | async) {
-      @case ('Connected') {
-        <mat-icon color="primary">cloud_done</mat-icon>
-        <h3 class="mat-label-large">Verbonden</h3>
-      }
-      @case ('Reconnecting') {
-        <mat-icon color="warn">sync</mat-icon>
-        <h3 class="mat-label-large">Verbinding maken...</h3>
-      }
-      @default {
-        <mat-icon color="primary">cloud_off</mat-icon>
-        <h3 class="mat-label-large">Verbinding verbroken</h3>
-      }
-    }
-  </div>
-  <button mat-raised-button color="primary" (click)="overridePosFinancial()">
-    Initialiseer Terminal
-  </button>
+<app-header>
   <div class="flex-spacer"></div>
   <div (click)="logout()" matRipple>
     <mat-icon color="accent">logout</mat-icon>
     <h3 class="mat-label-large">Uitloggen</h3>
   </div>
 </app-header>
-
+<!-- 
 <mat-sidenav-container class="sidenav-container">
   <nav #sidenav mode="side" opened>
     <mat-nav-list>
