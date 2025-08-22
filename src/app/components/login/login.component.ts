@@ -122,7 +122,7 @@ export class LoginComponent implements OnDestroy, AfterViewInit {
         AppActions.setToken({ token: loginResult }),
       );
       this.loggingIn = false;
-      this._router.navigate(['/dashboard']);
+      this._router.navigate(['/bitcoin2']);
     });
   }
 
