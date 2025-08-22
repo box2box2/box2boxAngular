@@ -48,6 +48,20 @@ export interface VolumeProfile {
   Val: number;
 }
 
+export interface BoxModel {
+  Id: number;
+  Symbol: string;
+  Timeframe: string;
+  ZoneMin: number;
+  ZoneMax: number;
+  Reason: string;
+  Strength: number;
+  Color?: string;
+  PositionType?: string;
+  Type?: string;
+  CreatedAt?: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -85,5 +99,10 @@ export class MarketService {
   getVolumeProfiles(symbol: string, timeframe: string): Observable<VolumeProfile[]> {
     const params = new HttpParams().set('symbol', symbol).set('timeframe', timeframe);
     return this.http.get<VolumeProfile[]>(`${this.BASE}VolumeProfiles`, { params });
+  }
+
+  getBoxes(symbol: string, timeframe: string): Observable<BoxModel[]> {
+    const params = new HttpParams().set('symbol', symbol).set('timeframe', timeframe);
+    return this.http.get<BoxModel[]>(`${this.BASE}Boxes`, { params });
   }
 }

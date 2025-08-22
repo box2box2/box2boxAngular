@@ -53,11 +53,14 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
   showVolumeProfile = false;
   showEmaMma = false;
   showVwap = false;
+  showBoxes = true;
 
   // cached levels
   fibLevels: FibLevel[] = [];
   emaMmaLevels: EmaMmaLevel[] = [];
   volumeProfiles: VolumeProfile[] = [];
+  // boxes for selected symbol/timeframe
+  boxes: any[] = [];
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   chartData: any = {
@@ -148,7 +151,7 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
 
   // how many datasets are main (candlestick) so we can slice overlays off
   private mainDatasetCount = 1;
-
+  private annotationRegistered = false;
   constructor(private market: MarketService) {}
 
   async ngAfterViewInit(): Promise<void> {
@@ -163,6 +166,80 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
     } catch {
       // plugin not installed or import failed - ignore
     }
+    // register a fallback plugin that draws boxes directly on the canvas
+    Chart.register({
+      id: 'drawBoxesFallback',
+      afterDraw: (chart: any) => {
+        if (!this.showBoxes || !this.boxes || !this.boxes.length) return;
+        const ctx = chart.ctx;
+        const yScale = chart.scales['y'];
+        const xScale = chart.scales['x'];
+        // draw boxes across full x-range between ZoneMin/ZoneMax
+        this.boxes.forEach((b: any) => {
+          try {
+            const y1 = yScale.getPixelForValue(b.ZoneMax);
+            const y2 = yScale.getPixelForValue(b.ZoneMin);
+            const left = xScale.left;
+            const right = xScale.right;
+            const height = y2 - y1;
+            ctx.save();
+            // prepare fillStyle from Color (hex) or use rgba string
+            let fill = b.Color || '#FFA500';
+            if (!fill.startsWith('rgba')) {
+              const hex = fill.replace('#', '');
+              const r = parseInt(hex.substring(0, 2), 16);
+              const g = parseInt(hex.substring(2, 4), 16);
+              const bl = parseInt(hex.substring(4, 6), 16);
+              fill = `rgba(${r},${g},${bl},0.12)`;
+            }
+            ctx.fillStyle = fill;
+            ctx.fillRect(left, y1, right - left, height);
+            // draw border
+            ctx.strokeStyle = b.Color || '#FFA500';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(left, y1, right - left, height);
+
+            // draw label: Strength and truncated Reason
+            try {
+              const reason = (b.Reason || '').toString();
+              const strength = b.Strength != null ? `S:${b.Strength}` : '';
+              const text = `${strength} ${reason}`.trim();
+              const maxChars = 80;
+              const disp = text.length > maxChars ? text.substring(0, maxChars - 1) + '…' : text;
+              // choose contrasting color for text
+              const color = b.Color || '#FFA500';
+              let r = 255, g = 165, bl = 0;
+              if (color.startsWith('#') && color.length === 7) {
+                const hex = color.replace('#', '');
+                r = parseInt(hex.substring(0, 2), 16);
+                g = parseInt(hex.substring(2, 4), 16);
+                bl = parseInt(hex.substring(4, 6), 16);
+              }
+              // luminance formula
+              const lum = (0.299 * r + 0.587 * g + 0.114 * bl) / 255;
+              const textColor = lum > 0.6 ? '#000000' : '#ffffff';
+              ctx.save();
+              ctx.font = '12px sans-serif';
+              ctx.fillStyle = textColor;
+              ctx.textBaseline = 'top';
+              // padding inside box
+              const pad = 6;
+              const tx = left + pad;
+              const ty = y1 + pad;
+              // clip text to box width
+              const maxWidth = right - left - pad * 2;
+              ctx.fillText(disp, tx, ty, maxWidth);
+              ctx.restore();
+            } catch {
+              // ignore text drawing errors
+            }
+            ctx.restore();
+          } catch {
+            // ignore drawing errors
+          }
+        });
+      },
+    });
   }
 
   resetZoom(): void {
@@ -197,8 +274,8 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
       .getCandles(this.selectedSymbol, this.selectedTimeframe, limit)
       .subscribe((c) => {
         this.mapCandlesToChartData(c || []);
-  // after candles load, refresh overlays (will load levels if needed)
-  this.refreshOverlays();
+        // after candles load, refresh overlays (will load levels if needed)
+        this.refreshOverlays();
       });
   }
   onSymbolChange(symbol: string): void {
@@ -213,8 +290,8 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
 
   toggleFib(checked: boolean): void {
     this.showFib = checked;
-  if (checked && !this.fibLevels.length) this.loadFibLevels();
-  else this.refreshOverlays();
+    if (checked && !this.fibLevels.length) this.loadFibLevels();
+    else this.refreshOverlays();
   }
 
   toggleEmaMma(checked: boolean): void {
@@ -236,12 +313,18 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
     else this.refreshOverlays();
   }
 
+  toggleBoxes(checked: boolean): void {
+    this.showBoxes = checked;
+    if (checked && !this.boxes.length) this.loadBoxes();
+    else this.refreshOverlays();
+  }
+
   private loadFibLevels(): void {
     this.market
       .getFibLevels(this.selectedSymbol, this.selectedTimeframe)
       .subscribe((arr) => {
         this.fibLevels = arr || [];
-  this.refreshOverlays();
+        this.refreshOverlays();
       });
   }
 
@@ -250,7 +333,7 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
       .getEmaMmaLevels(this.selectedSymbol, this.selectedTimeframe)
       .subscribe((arr) => {
         this.emaMmaLevels = arr || [];
-  this.refreshOverlays();
+        this.refreshOverlays();
       });
   }
 
@@ -261,7 +344,16 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
         this.volumeProfiles = arr || [];
         // debug: show how many profiles arrived
         console.debug('loadVolumeProfiles: got', this.volumeProfiles?.length);
-  this.refreshOverlays();
+        this.refreshOverlays();
+      });
+  }
+
+  private loadBoxes(): void {
+    this.market
+      .getBoxes(this.selectedSymbol, this.selectedTimeframe)
+      .subscribe((arr) => {
+        this.boxes = arr || [];
+        this.refreshOverlays();
       });
   }
 
@@ -292,9 +384,13 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
     const vwapTypes = ['VWAP', 'RVWAP'];
     let emaItems = this.emaMmaLevels;
     if (this.showVwap) {
-      emaItems = this.emaMmaLevels.filter((e) => vwapTypes.includes((e.Type || '').toUpperCase()));
+      emaItems = this.emaMmaLevels.filter((e) =>
+        vwapTypes.includes((e.Type || '').toUpperCase()),
+      );
     } else if (this.showEmaMma) {
-      emaItems = this.emaMmaLevels.filter((e) => !vwapTypes.includes((e.Type || '').toUpperCase()));
+      emaItems = this.emaMmaLevels.filter(
+        (e) => !vwapTypes.includes((e.Type || '').toUpperCase()),
+      );
     } else {
       emaItems = [];
     }
@@ -317,7 +413,7 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
   }
 
   private addVolumeProfileDatasets(): void {
-  // volume-profile overlays use preloaded volumeProfiles
+    // volume-profile overlays use preloaded volumeProfiles
     const overlays: unknown[] = [];
     this.volumeProfiles.forEach((v) => {
       overlays.push({
@@ -357,35 +453,82 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
   // Rebuild overlays based on current flags and cached level arrays. Removes old overlays, adds enabled overlays and resets zoom.
   private refreshOverlays(): void {
     // remove all overlays
-    this.chartData.datasets = this.chartData.datasets.slice(0, this.mainDatasetCount);
+    this.chartData.datasets = this.chartData.datasets.slice(
+      0,
+      this.mainDatasetCount,
+    );
+    // if boxes are enabled but not loaded, fetch them
+    if (this.showBoxes && !this.boxes.length) {
+      this.loadBoxes();
+    }
     // add overlays based on flags
     if (this.showFib && this.fibLevels.length) this.addFibDatasets();
-    if ((this.showEmaMma || this.showVwap) && this.emaMmaLevels.length) this.addEmaMmaDatasets();
-    if (this.showVolumeProfile && this.volumeProfiles.length) this.addVolumeProfileDatasets();
-    // ensure change detection and reset zoom so x-range fits candlesticks
-    this.chartData = { datasets: [...(this.chartData.datasets as unknown as unknown[])] };
+    if ((this.showEmaMma || this.showVwap) && this.emaMmaLevels.length)
+      this.addEmaMmaDatasets();
+    if (this.showVolumeProfile && this.volumeProfiles.length)
+      this.addVolumeProfileDatasets();
+    // ensure change detection
+    this.chartData = {
+      datasets: [...(this.chartData.datasets as unknown as unknown[])],
+    };
+    // if annotation plugin available, build annotation entries for boxes
+    if (this.annotationRegistered && this.showBoxes && this.boxes.length) {
+      // configure plugin options via chartOptions.plugins.annotation
+      const annCfg: any = { annotations: {} };
+      this.boxes.forEach((b: any, idx: number) => {
+        annCfg.annotations[`box_${b.Id || idx}`] = {
+          type: 'box',
+          yMin: b.ZoneMin,
+          yMax: b.ZoneMax,
+          xMin: 'min',
+          xMax: 'max',
+          backgroundColor: (b.Color || '#FFA500') + '33',
+          borderColor: b.Color || '#FFA500',
+          borderWidth: 1,
+        };
+      });
+      // assign annotation config to chartOptions and update chart
+      this.chartOptions.plugins = this.chartOptions.plugins || {};
+      this.chartOptions.plugins.annotation = annCfg;
+    }
+    // reset zoom so x-range fits candlesticks
     this.resetZoom();
   }
 
   private removeFibDatasets(): void {
-  this.chartData.datasets = this.chartData.datasets.slice(0, this.mainDatasetCount);
-  // reassign to trigger update and reset zoom to fit main data
-  this.chartData = { datasets: [...(this.chartData.datasets as unknown as unknown[])] };
-  this.resetZoom();
+    this.chartData.datasets = this.chartData.datasets.slice(
+      0,
+      this.mainDatasetCount,
+    );
+    // reassign to trigger update and reset zoom to fit main data
+    this.chartData = {
+      datasets: [...(this.chartData.datasets as unknown as unknown[])],
+    };
+    this.resetZoom();
   }
 
   private removeEmaMmaDatasets(): void {
-  this.chartData.datasets = this.chartData.datasets.slice(0, this.mainDatasetCount);
-  // reassign to trigger update and reset zoom to fit main data
-  this.chartData = { datasets: [...(this.chartData.datasets as unknown as unknown[])] };
-  this.resetZoom();
+    this.chartData.datasets = this.chartData.datasets.slice(
+      0,
+      this.mainDatasetCount,
+    );
+    // reassign to trigger update and reset zoom to fit main data
+    this.chartData = {
+      datasets: [...(this.chartData.datasets as unknown as unknown[])],
+    };
+    this.resetZoom();
   }
 
   private removeVolumeProfileDatasets(): void {
-  this.chartData.datasets = this.chartData.datasets.slice(0, this.mainDatasetCount);
-  // reassign to trigger update and reset zoom to fit main data
-  this.chartData = { datasets: [...(this.chartData.datasets as unknown as unknown[])] };
-  this.resetZoom();
+    this.chartData.datasets = this.chartData.datasets.slice(
+      0,
+      this.mainDatasetCount,
+    );
+    // reassign to trigger update and reset zoom to fit main data
+    this.chartData = {
+      datasets: [...(this.chartData.datasets as unknown as unknown[])],
+    };
+    this.resetZoom();
   }
 
   // Helper to create a dataset that draws a horizontal line across current x-range

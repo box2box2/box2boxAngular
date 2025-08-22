@@ -66,3 +66,6 @@ alleen     "RunStatus": "BoxesCollected"
 
 https://botapi-f3fkahc9eadkfveh.swedencentral-01.azurewebsites.net/Candles/bybit?symbol=BTCUSDT&timeframe=1h&limit=100
 
+volgend:
+
+https://www.youtube.com/watch?v=zntqdl24r78&list=PL7bl1VAGv7sMN9Z2FX3Memjmvl_qeZote&ab_channel=JaysonCasper 
