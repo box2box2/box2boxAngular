@@ -12,6 +12,8 @@ html {
   @include mat.all-component-themes(stylesm3-theme.$light-theme);
   @include mat.typography-hierarchy(stylesm3-theme.$light-theme);
 
+  @import './styles/dark-theme.scss';
+
   body {
     margin: 0;
     padding: 0;

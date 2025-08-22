@@ -1,4 +1,8 @@
 <header class="app-header" [style.background-color]="headerColor || 'var(--sys-primary-container)'">
   <ng-content></ng-content>
+  <button class="theme-toggle" (click)="toggleTheme()" aria-label="Toggle theme">
+    <svg class="icon" viewBox="0 0 24 24">
+      <use href="#theme-light-dark"></use>
+    </svg>
+  </button>
 </header>
-

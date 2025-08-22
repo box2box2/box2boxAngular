@@ -1,0 +1,89 @@
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+export interface SymbolModel {
+  Id: number;
+  SymbolName: string;
+  Active: boolean;
+  RunStatus: string;
+}
+
+export interface Candle {
+  Symbol: string;
+  Timeframe: string;
+  Time: string; // ISO date string
+  Open: number;
+  High: number;
+  Low: number;
+  Close: number;
+  Volume: number;
+}
+
+export interface FibLevel {
+  Symbol: string;
+  Timeframe: string;
+  Time: string;
+  Type: string;
+  Level: number;
+  Price: number;
+}
+
+export interface EmaMmaLevel {
+  Id: number;
+  Symbol: string;
+  Timeframe: string;
+  Type: string; // 'MMA' or 'EMA' or 'VWAP' etc
+  Period?: number;
+  Value: number;
+}
+
+export interface VolumeProfile {
+  Id: number;
+  Symbol: string;
+  Timeframe: string;
+  Poc: number;
+  Vah: number;
+  Val: number;
+}
+
+@Injectable({
+  providedIn: 'root',
+})
+export class MarketService {
+  // Use direct API URL for local development (no proxy)
+  // Ensure the API at https://localhost:7212 allows CORS for the frontend origin.
+  private readonly BASE = 'https://localhost:7212/';
+
+  constructor(private http: HttpClient) {}
+
+  getSymbols(): Observable<SymbolModel[]> {
+    return this.http
+      .get<SymbolModel[]>(`${this.BASE}Symbols`)
+      .pipe(map((arr) => (arr || []).filter((s) => s.RunStatus === 'BoxesCollected')));
+  }
+
+  getCandles(symbol: string, timeframe: string, limit = 100): Observable<Candle[]> {
+    const params = new HttpParams()
+      .set('symbol', symbol)
+      .set('timeframe', timeframe)
+      .set('limit', `${limit}`);
+    return this.http.get<Candle[]>(`${this.BASE}Candles/bybit`, { params });
+  }
+
+  getFibLevels(symbol: string, timeframe: string): Observable<FibLevel[]> {
+    const params = new HttpParams().set('symbol', symbol).set('timeframe', timeframe);
+    return this.http.get<FibLevel[]>(`${this.BASE}FibLevels`, { params });
+  }
+
+  getEmaMmaLevels(symbol: string, timeframe: string): Observable<EmaMmaLevel[]> {
+    const params = new HttpParams().set('symbol', symbol).set('timeframe', timeframe);
+    return this.http.get<EmaMmaLevel[]>(`${this.BASE}EmaMmaLevels`, { params });
+  }
+
+  getVolumeProfiles(symbol: string, timeframe: string): Observable<VolumeProfile[]> {
+    const params = new HttpParams().set('symbol', symbol).set('timeframe', timeframe);
+    return this.http.get<VolumeProfile[]>(`${this.BASE}VolumeProfiles`, { params });
+  }
+}
