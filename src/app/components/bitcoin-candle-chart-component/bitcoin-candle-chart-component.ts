@@ -64,7 +64,6 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
   // boxes for selected symbol/timeframe
   boxes: any[] = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   chartData: any = {
     datasets: [
       {
@@ -103,8 +102,6 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
     ],
   };
 
-  // allow zoom plugin options by using a permissive any here
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   chartOptions: any = {
     responsive: true,
     plugins: {
@@ -115,9 +112,6 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
           mode: 'x',
           // require a small drag distance to start panning to avoid jitter
           threshold: 10,
-          // update the chart during/after pan to ensure visuals sync
-          // use plugin callback signature: ({chart}) => void
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           onPan: ({ chart }: { chart: any }) => {
             try {
               chart.update();
@@ -167,10 +161,8 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
     // try to dynamically import/register the zoom plugin if it's installed
     try {
       // dynamic import works in the browser build if the package is installed
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const mod = await import('chartjs-plugin-zoom');
       // register default export or module itself
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       Chart.register((mod && (mod.default || mod)) as any);
     } catch {
       // plugin not installed or import failed - ignore
@@ -588,42 +580,6 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
       this.chartOptions.plugins.annotation = annCfg;
     }
     // reset zoom so x-range fits candlesticks
-    this.resetZoom();
-  }
-
-  private removeFibDatasets(): void {
-    this.chartData.datasets = this.chartData.datasets.slice(
-      0,
-      this.mainDatasetCount,
-    );
-    // reassign to trigger update and reset zoom to fit main data
-    this.chartData = {
-      datasets: [...(this.chartData.datasets as unknown as unknown[])],
-    };
-    this.resetZoom();
-  }
-
-  private removeEmaMmaDatasets(): void {
-    this.chartData.datasets = this.chartData.datasets.slice(
-      0,
-      this.mainDatasetCount,
-    );
-    // reassign to trigger update and reset zoom to fit main data
-    this.chartData = {
-      datasets: [...(this.chartData.datasets as unknown as unknown[])],
-    };
-    this.resetZoom();
-  }
-
-  private removeVolumeProfileDatasets(): void {
-    this.chartData.datasets = this.chartData.datasets.slice(
-      0,
-      this.mainDatasetCount,
-    );
-    // reassign to trigger update and reset zoom to fit main data
-    this.chartData = {
-      datasets: [...(this.chartData.datasets as unknown as unknown[])],
-    };
     this.resetZoom();
   }
 
