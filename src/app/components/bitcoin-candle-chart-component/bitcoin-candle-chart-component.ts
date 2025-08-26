@@ -24,6 +24,7 @@ import {
   CandlestickController,
   CandlestickElement,
 } from 'chartjs-chart-financial';
+import { HeaderComponent } from '../header/header.component';
 
 Chart.register(CandlestickController, CandlestickElement);
 
@@ -38,6 +39,7 @@ Chart.register(CandlestickController, CandlestickElement);
     MatButtonToggleModule,
     MatCheckboxModule,
     MatButtonModule,
+    HeaderComponent
   ],
   templateUrl: 'bitcoin-candle-chart-component.html',
 })

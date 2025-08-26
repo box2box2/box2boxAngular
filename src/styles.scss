@@ -1,5 +1,5 @@
-@use '@angular/material' as mat;
-@use './stylesm3-theme.scss' as stylesm3-theme;
+@use "@angular/material" as mat;
+@use "./stylesm3-theme.scss" as stylesm3-theme;
 
 @include mat.elevation-classes();
 @include mat.app-background();
@@ -12,12 +12,11 @@ html {
   @include mat.all-component-themes(stylesm3-theme.$light-theme);
   @include mat.typography-hierarchy(stylesm3-theme.$light-theme);
 
-  @import './styles/dark-theme.scss';
+  @import "./styles/dark-theme.scss";
 
   body {
     margin: 0;
     padding: 0;
-
 
     button.mat-mdc-button.mat-warn,
     button.mat-mdc-unelevated-button.mat-warn,
@@ -98,10 +97,7 @@ html {
   ::-ms-scrollbar {
     width: 8px;
     height: 8px;
-
   }
-
-
 
   ::-ms-scrollbar-thumb {
     background-color: var(--sys-primary);
@@ -111,5 +107,4 @@ html {
   ::-ms-scrollbar-thumb:hover {
     background: var(--sys-primary);
   }
-
 }
