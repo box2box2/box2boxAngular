@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgChartsModule } from 'ng2-charts';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -45,7 +45,7 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
   // access the chart instance for reset
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
   availableTimeframes = ['30m', '1h', '4h', '1d', '1w', '1y'];
-  selectedTimeframe = '1h';
+  selectedTimeframe = '1d';
   symbols: SymbolModel[] = [];
   selectedSymbol = 'BTCUSDT';
   // overlay toggles
@@ -155,7 +155,7 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
   // how many datasets are main (candlestick) so we can slice overlays off
   private mainDatasetCount = 1;
   private annotationRegistered = false;
-  constructor(private market: MarketService) {}
+  constructor(private market: MarketService, private el: ElementRef) {}
 
   async ngAfterViewInit(): Promise<void> {
     // try to dynamically import/register the zoom plugin if it's installed
@@ -246,6 +246,28 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
         });
       },
     });
+
+    // compute header height and expose as CSS variable so styles can calc remaining space
+    try {
+      const hostEl = this.el?.nativeElement as HTMLElement | undefined;
+      if (hostEl) {
+        const header = hostEl.querySelector('.controls') as HTMLElement | null;
+        const headerHeight = header ? Math.ceil(header.offsetHeight) : 72;
+        hostEl.style.setProperty('--header-height', `${headerHeight}px`);
+      }
+    } catch {
+      // ignore measurement errors
+    }
+
+    // allow the chart canvas to freely size to the container
+    try {
+      this.chartOptions = {
+        ...this.chartOptions,
+        maintainAspectRatio: false,
+      };
+    } catch {
+      // ignore
+    }
   }
 
   resetZoom(): void {
@@ -274,7 +296,7 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
     });
   }
 
-  loadCandles(limit = 100): void {
+  loadCandles(limit = 250): void {
     if (!this.selectedSymbol) return;
     const key = `${this.selectedSymbol}|${this.selectedTimeframe}|${limit}`;
     const cached = this.candlesCache.get(key);
@@ -321,12 +343,12 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
     else this.refreshOverlays();
   }
 
-  toggleVwap(checked: boolean): void {
-    this.showVwap = checked;
-    // VWAP data is included in the emaMma endpoint; ensure it's loaded
-    if (checked) this.loadEmaMmaLevels();
-    else this.refreshOverlays();
-  }
+  // toggleVwap(checked: boolean): void {
+  //   this.showVwap = checked;
+  //   // VWAP data is included in the emaMma endpoint; ensure it's loaded
+  //   if (checked) this.loadEmaMmaLevels();
+  //   else this.refreshOverlays();
+  // }
 
   toggleBoxes(checked: boolean): void {
     this.showBoxes = checked;
@@ -394,47 +416,54 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
   }
 
   private loadBoxes(): void {
-    const key = `${this.selectedSymbol}|${this.selectedTimeframe}`;
+    // Boxes are sourced from the 1d timeframe regardless of current view
+    const key = `${this.selectedSymbol}|1d`;
     const cached = this.boxesCache.get(key);
     if (cached) {
       this.boxes = cached;
       this.refreshOverlays();
       return;
     }
-    this.market
-      .getBoxes(this.selectedSymbol, this.selectedTimeframe)
-      .subscribe((arr) => {
-        this.boxes = arr || [];
-        this.boxesCache.set(key, this.boxes);
-        this.refreshOverlays();
-      });
+    this.market.getBoxes(this.selectedSymbol, '1d').subscribe((arr) => {
+      // Only show boxes where Type === 'Range' (case-insensitive)
+      const filtered = (arr || []).filter(
+        (b: any) => ((b.Type || b.type || '') + '').toLowerCase() === 'range',
+      );
+      this.boxes = filtered;
+      this.boxesCache.set(key, this.boxes);
+      this.refreshOverlays();
+    });
   }
 
   // Ensure overlay data is loaded for active flags (called after candles load)
   private ensureOverlaysLoaded(): void {
     // load only the datasets we need and that aren't cached yet
     if (this.showFib) this.loadFibLevels();
-    if (this.showEmaMma || this.showVwap) this.loadEmaMmaLevels();
+    // if (this.showEmaMma || this.showVwap) this.loadEmaMmaLevels();
     if (this.showVolumeProfile) this.loadVolumeProfiles();
     if (this.showBoxes) this.loadBoxes();
     // after load calls settle, they will call refreshOverlays() via their subscriptions
     // but if none of them needed loading (cached), refresh overlays now
-    const key = `${this.selectedSymbol}|${this.selectedTimeframe}`;
-    const needFib = this.showFib && !this.fibCache.get(key);
-    const needEma =
-      (this.showEmaMma || this.showVwap) && !this.emaCache.get(key);
-    const needVol = this.showVolumeProfile && !this.volumeProfileCache.get(key);
-    const needBoxes = this.showBoxes && !this.boxesCache.get(key);
-    if (!needFib && !needEma && !needVol && !needBoxes) {
+  const key = `${this.selectedSymbol}|${this.selectedTimeframe}`;
+  const needFib = this.showFib && !this.fibCache.get(key);
+    // const needEma =
+    //   (this.showEmaMma || this.showVwap) && !this.emaCache.get(key);
+  const needVol = this.showVolumeProfile && !this.volumeProfileCache.get(key);
+  // boxes cached under 1d key
+  const boxesKey = `${this.selectedSymbol}|1d`;
+  const needBoxes = this.showBoxes && !this.boxesCache.get(boxesKey);
+    if (!needFib && /*!needEma &&*/ !needVol && !needBoxes) {
       // all data available from cache, just refresh overlays
       this.refreshOverlays();
     }
   }
 
   private addFibDatasets(): void {
-  const items = this.fibLevels || [];
-  const filtered = this.showZeros ? items : items.filter((f) => Number(f.Price) !== 0);
-  const overlays = filtered.map((f) => ({
+    const items = this.fibLevels || [];
+    const filtered = this.showZeros
+      ? items
+      : items.filter((f) => Number(f.Price) !== 0);
+    const overlays = filtered.map((f) => ({
       type: 'line' as const,
       label: `Fib ${f.Level}`,
       data: this.horizontalLineData(f.Price),
@@ -470,9 +499,11 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
     } else {
       emaItems = [];
     }
-  const items = emaItems || [];
-  const filtered = this.showZeros ? items : items.filter((e) => Number(e.Value) !== 0);
-  const overlays = filtered.map((e) => ({
+    const items = emaItems || [];
+    const filtered = this.showZeros
+      ? items
+      : items.filter((e) => Number(e.Value) !== 0);
+    const overlays = filtered.map((e) => ({
       type: 'line' as const,
       label: `${e.Type} ${e.Period ?? ''}`,
       data: this.horizontalLineData(e.Value),
@@ -496,7 +527,10 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
     const items = this.volumeProfiles || [];
     const filtered = this.showZeros
       ? items
-      : items.filter((v) => Number(v.Poc) !== 0 || Number(v.Vah) !== 0 || Number(v.Val) !== 0);
+      : items.filter(
+          (v) =>
+            Number(v.Poc) !== 0 || Number(v.Vah) !== 0 || Number(v.Val) !== 0,
+        );
     filtered.forEach((v) => {
       if (this.showZeros || Number(v.Poc) !== 0) {
         overlays.push({

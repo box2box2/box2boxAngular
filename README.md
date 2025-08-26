@@ -69,3 +69,9 @@ https://botapi-f3fkahc9eadkfveh.swedencentral-01.azurewebsites.net/Candles/bybit
 volgend:
 
 https://www.youtube.com/watch?v=zntqdl24r78&list=PL7bl1VAGv7sMN9Z2FX3Memjmvl_qeZote&ab_channel=JaysonCasper 
+
+
+
+Boxes moeten alleen opgehaald worden van de 1d grafiek (dus elk timeframe moet kijken naar de boxes van de 1d timeframe)
+
+Boxes moeten alleen getoond worden waar Type = "Range" 
