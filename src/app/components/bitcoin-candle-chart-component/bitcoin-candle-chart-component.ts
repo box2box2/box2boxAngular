@@ -54,6 +54,8 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
   showEmaMma = false;
   showVwap = false;
   showBoxes = true;
+  // show overlays that have zero values (when false, zero-valued overlays are omitted)
+  showZeros = false;
 
   // cached levels
   fibLevels: FibLevel[] = [];
@@ -149,6 +151,13 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
     },
   };
 
+  // simple in-memory caches to avoid repeated HTTP calls per symbol/timeframe
+  private boxesCache = new Map<string, any[]>();
+  private fibCache = new Map<string, FibLevel[]>();
+  private emaCache = new Map<string, EmaMmaLevel[]>();
+  private volumeProfileCache = new Map<string, VolumeProfile[]>();
+  private candlesCache = new Map<string, Candle[]>();
+
   // how many datasets are main (candlestick) so we can slice overlays off
   private mainDatasetCount = 1;
   private annotationRegistered = false;
@@ -205,10 +214,15 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
               const strength = b.Strength != null ? `S:${b.Strength}` : '';
               const text = `${strength} ${reason}`.trim();
               const maxChars = 80;
-              const disp = text.length > maxChars ? text.substring(0, maxChars - 1) + '…' : text;
+              const disp =
+                text.length > maxChars
+                  ? text.substring(0, maxChars - 1) + '…'
+                  : text;
               // choose contrasting color for text
               const color = b.Color || '#FFA500';
-              let r = 255, g = 165, bl = 0;
+              let r = 255,
+                g = 165,
+                bl = 0;
               if (color.startsWith('#') && color.length === 7) {
                 const hex = color.replace('#', '');
                 r = parseInt(hex.substring(0, 2), 16);
@@ -270,12 +284,21 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
 
   loadCandles(limit = 100): void {
     if (!this.selectedSymbol) return;
+    const key = `${this.selectedSymbol}|${this.selectedTimeframe}|${limit}`;
+    const cached = this.candlesCache.get(key);
+    if (cached) {
+      this.mapCandlesToChartData(cached || []);
+      // only ensure overlays (they may be cached already)
+      this.ensureOverlaysLoaded();
+      return;
+    }
     this.market
       .getCandles(this.selectedSymbol, this.selectedTimeframe, limit)
       .subscribe((c) => {
+        this.candlesCache.set(key, c || []);
         this.mapCandlesToChartData(c || []);
-        // after candles load, refresh overlays (will load levels if needed)
-        this.refreshOverlays();
+        // after candles load, ensure overlays that are enabled are loaded
+        this.ensureOverlaysLoaded();
       });
   }
   onSymbolChange(symbol: string): void {
@@ -290,75 +313,136 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
 
   toggleFib(checked: boolean): void {
     this.showFib = checked;
-    if (checked && !this.fibLevels.length) this.loadFibLevels();
+    if (checked) this.loadFibLevels();
     else this.refreshOverlays();
   }
 
   toggleEmaMma(checked: boolean): void {
     this.showEmaMma = checked;
-    if (checked && !this.emaMmaLevels.length) this.loadEmaMmaLevels();
+    if (checked) this.loadEmaMmaLevels();
     else this.refreshOverlays();
   }
 
   toggleVolumeProfile(checked: boolean): void {
     this.showVolumeProfile = checked;
-    if (checked && !this.volumeProfiles.length) this.loadVolumeProfiles();
+    if (checked) this.loadVolumeProfiles();
     else this.refreshOverlays();
   }
 
   toggleVwap(checked: boolean): void {
     this.showVwap = checked;
     // VWAP data is included in the emaMma endpoint; ensure it's loaded
-    if (checked && !this.emaMmaLevels.length) this.loadEmaMmaLevels();
+    if (checked) this.loadEmaMmaLevels();
     else this.refreshOverlays();
   }
 
   toggleBoxes(checked: boolean): void {
     this.showBoxes = checked;
-    if (checked && !this.boxes.length) this.loadBoxes();
+    if (checked) this.loadBoxes();
     else this.refreshOverlays();
   }
 
+  toggleShowZeros(checked: boolean): void {
+    this.showZeros = checked;
+    // rebuild overlays to apply zero-value filtering
+    this.refreshOverlays();
+  }
+
   private loadFibLevels(): void {
+    const key = `${this.selectedSymbol}|${this.selectedTimeframe}`;
+    const cached = this.fibCache.get(key);
+    if (cached) {
+      this.fibLevels = cached;
+      this.refreshOverlays();
+      return;
+    }
     this.market
       .getFibLevels(this.selectedSymbol, this.selectedTimeframe)
       .subscribe((arr) => {
         this.fibLevels = arr || [];
+        this.fibCache.set(key, this.fibLevels);
         this.refreshOverlays();
       });
   }
 
   private loadEmaMmaLevels(): void {
+    const key = `${this.selectedSymbol}|${this.selectedTimeframe}`;
+    const cached = this.emaCache.get(key);
+    if (cached) {
+      this.emaMmaLevels = cached;
+      this.refreshOverlays();
+      return;
+    }
     this.market
       .getEmaMmaLevels(this.selectedSymbol, this.selectedTimeframe)
       .subscribe((arr) => {
         this.emaMmaLevels = arr || [];
+        this.emaCache.set(key, this.emaMmaLevels);
         this.refreshOverlays();
       });
   }
 
   private loadVolumeProfiles(): void {
+    const key = `${this.selectedSymbol}|${this.selectedTimeframe}`;
+    const cached = this.volumeProfileCache.get(key);
+    if (cached) {
+      this.volumeProfiles = cached;
+      this.refreshOverlays();
+      return;
+    }
     this.market
       .getVolumeProfiles(this.selectedSymbol, this.selectedTimeframe)
       .subscribe((arr) => {
         this.volumeProfiles = arr || [];
         // debug: show how many profiles arrived
         console.debug('loadVolumeProfiles: got', this.volumeProfiles?.length);
+        this.volumeProfileCache.set(key, this.volumeProfiles);
         this.refreshOverlays();
       });
   }
 
   private loadBoxes(): void {
+    const key = `${this.selectedSymbol}|${this.selectedTimeframe}`;
+    const cached = this.boxesCache.get(key);
+    if (cached) {
+      this.boxes = cached;
+      this.refreshOverlays();
+      return;
+    }
     this.market
       .getBoxes(this.selectedSymbol, this.selectedTimeframe)
       .subscribe((arr) => {
         this.boxes = arr || [];
+        this.boxesCache.set(key, this.boxes);
         this.refreshOverlays();
       });
   }
 
+  // Ensure overlay data is loaded for active flags (called after candles load)
+  private ensureOverlaysLoaded(): void {
+    // load only the datasets we need and that aren't cached yet
+    if (this.showFib) this.loadFibLevels();
+    if (this.showEmaMma || this.showVwap) this.loadEmaMmaLevels();
+    if (this.showVolumeProfile) this.loadVolumeProfiles();
+    if (this.showBoxes) this.loadBoxes();
+    // after load calls settle, they will call refreshOverlays() via their subscriptions
+    // but if none of them needed loading (cached), refresh overlays now
+    const key = `${this.selectedSymbol}|${this.selectedTimeframe}`;
+    const needFib = this.showFib && !this.fibCache.get(key);
+    const needEma =
+      (this.showEmaMma || this.showVwap) && !this.emaCache.get(key);
+    const needVol = this.showVolumeProfile && !this.volumeProfileCache.get(key);
+    const needBoxes = this.showBoxes && !this.boxesCache.get(key);
+    if (!needFib && !needEma && !needVol && !needBoxes) {
+      // all data available from cache, just refresh overlays
+      this.refreshOverlays();
+    }
+  }
+
   private addFibDatasets(): void {
-    const overlays = this.fibLevels.map((f) => ({
+  const items = this.fibLevels || [];
+  const filtered = this.showZeros ? items : items.filter((f) => Number(f.Price) !== 0);
+  const overlays = filtered.map((f) => ({
       type: 'line' as const,
       label: `Fib ${f.Level}`,
       data: this.horizontalLineData(f.Price),
@@ -394,7 +478,9 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
     } else {
       emaItems = [];
     }
-    const overlays = emaItems.map((e) => ({
+  const items = emaItems || [];
+  const filtered = this.showZeros ? items : items.filter((e) => Number(e.Value) !== 0);
+  const overlays = filtered.map((e) => ({
       type: 'line' as const,
       label: `${e.Type} ${e.Period ?? ''}`,
       data: this.horizontalLineData(e.Value),
@@ -415,31 +501,41 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
   private addVolumeProfileDatasets(): void {
     // volume-profile overlays use preloaded volumeProfiles
     const overlays: unknown[] = [];
-    this.volumeProfiles.forEach((v) => {
-      overlays.push({
-        type: 'line' as const,
-        label: 'POC',
-        data: this.horizontalLineData(v.Poc),
-        borderColor: 'rgba(0,200,0,0.9)',
-        borderWidth: 1,
-        pointRadius: 0,
-      });
-      overlays.push({
-        type: 'line' as const,
-        label: 'VAH',
-        data: this.horizontalLineData(v.Vah),
-        borderColor: 'rgba(200,0,200,0.9)',
-        borderWidth: 1,
-        pointRadius: 0,
-      });
-      overlays.push({
-        type: 'line' as const,
-        label: 'VAL',
-        data: this.horizontalLineData(v.Val),
-        borderColor: 'rgba(200,200,0,0.9)',
-        borderWidth: 1,
-        pointRadius: 0,
-      });
+    const items = this.volumeProfiles || [];
+    const filtered = this.showZeros
+      ? items
+      : items.filter((v) => Number(v.Poc) !== 0 || Number(v.Vah) !== 0 || Number(v.Val) !== 0);
+    filtered.forEach((v) => {
+      if (this.showZeros || Number(v.Poc) !== 0) {
+        overlays.push({
+          type: 'line' as const,
+          label: 'POC',
+          data: this.horizontalLineData(v.Poc),
+          borderColor: 'rgba(0,200,0,0.9)',
+          borderWidth: 1,
+          pointRadius: 0,
+        });
+      }
+      if (this.showZeros || Number(v.Vah) !== 0) {
+        overlays.push({
+          type: 'line' as const,
+          label: 'VAH',
+          data: this.horizontalLineData(v.Vah),
+          borderColor: 'rgba(200,0,200,0.9)',
+          borderWidth: 1,
+          pointRadius: 0,
+        });
+      }
+      if (this.showZeros || Number(v.Val) !== 0) {
+        overlays.push({
+          type: 'line' as const,
+          label: 'VAL',
+          data: this.horizontalLineData(v.Val),
+          borderColor: 'rgba(200,200,0,0.9)',
+          borderWidth: 1,
+          pointRadius: 0,
+        });
+      }
     });
     (this.chartData.datasets as unknown as unknown[]).push(
       ...(overlays as unknown[]),
