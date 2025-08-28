@@ -8,3 +8,4 @@ ng build --configuration production --base-href "https://box2box2.github.io/box2
 
 npx angular-cli-ghpages --dir=dist/box2box/browser
 
+npm run deploy

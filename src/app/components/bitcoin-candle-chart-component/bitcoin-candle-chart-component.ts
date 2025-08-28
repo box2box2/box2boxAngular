@@ -1,5 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  ElementRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgChartsModule } from 'ng2-charts';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -24,7 +30,6 @@ import {
   CandlestickController,
   CandlestickElement,
 } from 'chartjs-chart-financial';
-import { HeaderComponent } from '../header/header.component';
 
 Chart.register(CandlestickController, CandlestickElement);
 
@@ -39,7 +44,6 @@ Chart.register(CandlestickController, CandlestickElement);
     MatButtonToggleModule,
     MatCheckboxModule,
     MatButtonModule,
-    HeaderComponent
   ],
   templateUrl: 'bitcoin-candle-chart-component.html',
 })
@@ -157,7 +161,10 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
   // how many datasets are main (candlestick) so we can slice overlays off
   private mainDatasetCount = 1;
   private annotationRegistered = false;
-  constructor(private market: MarketService, private el: ElementRef) {}
+  constructor(
+    private market: MarketService,
+    private el: ElementRef,
+  ) {}
 
   async ngAfterViewInit(): Promise<void> {
     // try to dynamically import/register the zoom plugin if it's installed
@@ -446,14 +453,14 @@ export class BitcoinCandleChartComponent implements OnInit, AfterViewInit {
     if (this.showBoxes) this.loadBoxes();
     // after load calls settle, they will call refreshOverlays() via their subscriptions
     // but if none of them needed loading (cached), refresh overlays now
-  const key = `${this.selectedSymbol}|${this.selectedTimeframe}`;
-  const needFib = this.showFib && !this.fibCache.get(key);
+    const key = `${this.selectedSymbol}|${this.selectedTimeframe}`;
+    const needFib = this.showFib && !this.fibCache.get(key);
     // const needEma =
     //   (this.showEmaMma || this.showVwap) && !this.emaCache.get(key);
-  const needVol = this.showVolumeProfile && !this.volumeProfileCache.get(key);
-  // boxes cached under 1d key
-  const boxesKey = `${this.selectedSymbol}|1d`;
-  const needBoxes = this.showBoxes && !this.boxesCache.get(boxesKey);
+    const needVol = this.showVolumeProfile && !this.volumeProfileCache.get(key);
+    // boxes cached under 1d key
+    const boxesKey = `${this.selectedSymbol}|1d`;
+    const needBoxes = this.showBoxes && !this.boxesCache.get(boxesKey);
     if (!needFib && /*!needEma &&*/ !needVol && !needBoxes) {
       // all data available from cache, just refresh overlays
       this.refreshOverlays();
