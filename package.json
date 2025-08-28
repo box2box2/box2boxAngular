@@ -4,13 +4,14 @@
   "private": true,
   "scripts": {
     "ng": "ng",
-  "start": "ng serve --host=127.0.0.1",
+    "start": "ng serve --host=127.0.0.1",
     "build": "ng build",
     "build-prod": "ng build --configuration production --output-hashing=all",
     "test": "ng test",
     "lint": "eslint \"src/**/*.{ts,tsx}\" --fix",
     "e2e": "ng e2e",
-    "watch": "ng build --watch --configuration development"
+    "watch": "ng build --watch --configuration development",
+    "deploy": "ng build --configuration production --base-href 'https://box2box2.github.io/box2boxAngular/' && npx angular-cli-ghpages --dir=dist/box2box/browser"
   },
   "prettier": {
     "overrides": [
@@ -47,8 +48,8 @@
     "chart.js": "4.5.0",
     "chartjs-adapter-date-fns": "^3.0.0",
     "chartjs-chart-financial": "^0.2.1",
-  "chartjs-plugin-zoom": "^2.1.1",
-  "chartjs-plugin-annotation": "^2.0.1",
+    "chartjs-plugin-zoom": "^2.1.1",
+    "chartjs-plugin-annotation": "^2.0.1",
     "chartjs-plugin-datalabels": "2.2.0",
     "crypto-browserify": "3.12.1",
     "crypto-js": "4.2.0",
