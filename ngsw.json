@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1756403750453,
+  "timestamp": 1756404279263,
   "index": "'https://box2box2.github.io/box2boxAngular/'/index.html",
   "assetGroups": [
     {
@@ -17,7 +17,7 @@
         "'https://box2box2.github.io/box2boxAngular/'/chunk-OSMAKAVY.js",
         "'https://box2box2.github.io/box2boxAngular/'/chunk-TSRGIXR5.js",
         "'https://box2box2.github.io/box2boxAngular/'/index.html",
-        "'https://box2box2.github.io/box2boxAngular/'/main-NR23WNPG.js",
+        "'https://box2box2.github.io/box2boxAngular/'/main-7GPQMKSQ.js",
         "'https://box2box2.github.io/box2boxAngular/'/polyfills-5CFQRCPP.js",
         "'https://box2box2.github.io/box2boxAngular/'/styles-WB5WUP2A.css"
       ],
@@ -76,8 +76,8 @@
     "'https://box2box2.github.io/box2boxAngular/'/chunk-O2FZR76Q.js": "898e353f233ba5b57259c8c26ac8b58d25b8a614",
     "'https://box2box2.github.io/box2boxAngular/'/chunk-OSMAKAVY.js": "e8565c12ca529183b79759a1e6336fd6146a67d8",
     "'https://box2box2.github.io/box2boxAngular/'/chunk-TSRGIXR5.js": "6bdaee675b02d564efa037f5fec4c087e47f921d",
-    "'https://box2box2.github.io/box2boxAngular/'/index.html": "7723b4635384a557e8817783b172425e69cd2fc1",
-    "'https://box2box2.github.io/box2boxAngular/'/main-NR23WNPG.js": "d8b9a35b5174708a3649065954a1306b3ba13f99",
+    "'https://box2box2.github.io/box2boxAngular/'/index.html": "9a44a4b5e4e73fcf03c963e2ec2353acdaa1a3d3",
+    "'https://box2box2.github.io/box2boxAngular/'/main-7GPQMKSQ.js": "67ba1edc26f446dba202c6c1daa2c91ed4ad1fe0",
     "'https://box2box2.github.io/box2boxAngular/'/polyfills-5CFQRCPP.js": "f2241e9a25858f895ce299d15f6f22e849e2fd72",
     "'https://box2box2.github.io/box2boxAngular/'/styles-WB5WUP2A.css": "4e4593246f0367091013aed48f3fc70a5cf657c9"
   },
