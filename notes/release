@@ -1,0 +1,1 @@
+ng build --output-path=dist/box2boxAngular --base-href "https://<your-username>.github.io/box2boxAngular/"
