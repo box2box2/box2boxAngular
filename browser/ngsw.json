@@ -1,0 +1,113 @@
+{
+  "configVersion": 1,
+  "timestamp": 1756749540867,
+  "index": "https://box2box2.github.io/box2boxAngular/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "https://box2box2.github.io/box2boxAngular/chunk-5QXQLTZQ.js",
+        "https://box2box2.github.io/box2boxAngular/chunk-C5JIUREF.js",
+        "https://box2box2.github.io/box2boxAngular/chunk-D52IOBLC.js",
+        "https://box2box2.github.io/box2boxAngular/chunk-JVZTXU3G.js",
+        "https://box2box2.github.io/box2boxAngular/chunk-MKX4BM45.js",
+        "https://box2box2.github.io/box2boxAngular/chunk-OSMAKAVY.js",
+        "https://box2box2.github.io/box2boxAngular/chunk-PT2JM3JA.js",
+        "https://box2box2.github.io/box2boxAngular/chunk-RRWPCINU.js",
+        "https://box2box2.github.io/box2boxAngular/chunk-TSRGIXR5.js",
+        "https://box2box2.github.io/box2boxAngular/chunk-VBPAZFIT.js",
+        "https://box2box2.github.io/box2boxAngular/index.html",
+        "https://box2box2.github.io/box2boxAngular/main-Q3JNGYO2.js",
+        "https://box2box2.github.io/box2boxAngular/polyfills-5CFQRCPP.js",
+        "https://box2box2.github.io/box2boxAngular/styles-WB5WUP2A.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "https://box2box2.github.io/box2boxAngular/assets/i18n/nl.json",
+        "https://box2box2.github.io/box2boxAngular/assets/icons/icon-128x128.png",
+        "https://box2box2.github.io/box2boxAngular/assets/icons/icon-144x144.png",
+        "https://box2box2.github.io/box2boxAngular/assets/icons/icon-152x152.png",
+        "https://box2box2.github.io/box2boxAngular/assets/icons/icon-192x192.png",
+        "https://box2box2.github.io/box2boxAngular/assets/icons/icon-384x384.png",
+        "https://box2box2.github.io/box2boxAngular/assets/icons/icon-512x512.png",
+        "https://box2box2.github.io/box2boxAngular/assets/icons/icon-72x72.png",
+        "https://box2box2.github.io/box2boxAngular/assets/icons/icon-96x96.png",
+        "https://box2box2.github.io/box2boxAngular/assets/mdi.svg"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [
+    {
+      "name": "Api",
+      "patterns": [
+        "https:\\/\\/box2box2\\.github\\.io\\/box2boxAngular\\/!\\/api"
+      ],
+      "strategy": "freshness",
+      "maxSize": 0,
+      "maxAge": 0,
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "version": 1
+    }
+  ],
+  "hashTable": {
+    "https://box2box2.github.io/box2boxAngular/assets/i18n/nl.json": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+    "https://box2box2.github.io/box2boxAngular/assets/icons/icon-128x128.png": "4963e78c6dfcb7be151678d4a2d8847e235da323",
+    "https://box2box2.github.io/box2boxAngular/assets/icons/icon-144x144.png": "cc6a8d95f6884ee3cbf6fe4c15c3c4a47c28ccda",
+    "https://box2box2.github.io/box2boxAngular/assets/icons/icon-152x152.png": "133a45705b78537a51198542fe63e515fc10f6c3",
+    "https://box2box2.github.io/box2boxAngular/assets/icons/icon-192x192.png": "4a7114f05825d8c954ae2bcdced14fd15b0c4e0a",
+    "https://box2box2.github.io/box2boxAngular/assets/icons/icon-384x384.png": "4ad6a4544baf971a34f5f232531b784203e1eabe",
+    "https://box2box2.github.io/box2boxAngular/assets/icons/icon-512x512.png": "e77e46396cbfa8e3296ba10146886e4e5313a341",
+    "https://box2box2.github.io/box2boxAngular/assets/icons/icon-72x72.png": "168a49f3d55bdac996560e30bafae6d01fa5fc4a",
+    "https://box2box2.github.io/box2boxAngular/assets/icons/icon-96x96.png": "bd4d50c0d46a10c03ef35b5555fa5f7d82490840",
+    "https://box2box2.github.io/box2boxAngular/assets/mdi.svg": "6f03145d7236a998cef9e6b32701a080c6a2ba37",
+    "https://box2box2.github.io/box2boxAngular/chunk-5QXQLTZQ.js": "233227881a74f955f8b3de5d13ed4d30dcc37ea7",
+    "https://box2box2.github.io/box2boxAngular/chunk-C5JIUREF.js": "6ff1b5229fe17b41798b0003bab804c5df999f10",
+    "https://box2box2.github.io/box2boxAngular/chunk-D52IOBLC.js": "0043b3100c7ae081d7c72d439ce7091f096d36cd",
+    "https://box2box2.github.io/box2boxAngular/chunk-JVZTXU3G.js": "2938daebb373887c9adbecb2b5d1198384b0c728",
+    "https://box2box2.github.io/box2boxAngular/chunk-MKX4BM45.js": "e0b622752161021d393cd813f31405745f8592cc",
+    "https://box2box2.github.io/box2boxAngular/chunk-OSMAKAVY.js": "e8565c12ca529183b79759a1e6336fd6146a67d8",
+    "https://box2box2.github.io/box2boxAngular/chunk-PT2JM3JA.js": "9dc35024c3d9a08bb348b817b8548d8be75e16d5",
+    "https://box2box2.github.io/box2boxAngular/chunk-RRWPCINU.js": "118151764cb36301ecc734a54d53fc2d1552bfc9",
+    "https://box2box2.github.io/box2boxAngular/chunk-TSRGIXR5.js": "6bdaee675b02d564efa037f5fec4c087e47f921d",
+    "https://box2box2.github.io/box2boxAngular/chunk-VBPAZFIT.js": "092240108dc54aeb6dc5006c479e9a8ce8ceb952",
+    "https://box2box2.github.io/box2boxAngular/index.html": "ec0f36cc352a6f201c03584c7617cb08912b50a9",
+    "https://box2box2.github.io/box2boxAngular/main-Q3JNGYO2.js": "db64f5298bd9f60c128d4fef15ffd689f6c24fcf",
+    "https://box2box2.github.io/box2boxAngular/polyfills-5CFQRCPP.js": "f2241e9a25858f895ce299d15f6f22e849e2fd72",
+    "https://box2box2.github.io/box2boxAngular/styles-WB5WUP2A.css": "4e4593246f0367091013aed48f3fc70a5cf657c9"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ],
+  "navigationRequestStrategy": "performance"
+}
