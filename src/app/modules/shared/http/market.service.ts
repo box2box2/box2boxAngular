@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment.prod';
+import { Order } from '../models/order.dto';
 
 export interface SymbolModel {
   Id: number;
@@ -75,10 +76,18 @@ export class MarketService {
   getSymbols(): Observable<SymbolModel[]> {
     return this.http
       .get<SymbolModel[]>(`${this.BASE}Symbols`)
-      .pipe(map((arr) => (arr || []).filter((s) => s.RunStatus === 'BoxesCollected')));
+      .pipe(
+        map((arr) =>
+          (arr || []).filter((s) => s.RunStatus === 'BoxesCollected'),
+        ),
+      );
   }
 
-  getCandles(symbol: string, timeframe: string, limit = 100): Observable<Candle[]> {
+  getCandles(
+    symbol: string,
+    timeframe: string,
+    limit = 100,
+  ): Observable<Candle[]> {
     const params = new HttpParams()
       .set('symbol', symbol)
       .set('timeframe', timeframe)
@@ -87,22 +96,46 @@ export class MarketService {
   }
 
   getFibLevels(symbol: string, timeframe: string): Observable<FibLevel[]> {
-    const params = new HttpParams().set('symbol', symbol).set('timeframe', timeframe);
+    const params = new HttpParams()
+      .set('symbol', symbol)
+      .set('timeframe', timeframe);
     return this.http.get<FibLevel[]>(`${this.BASE}FibLevels`, { params });
   }
 
-  getEmaMmaLevels(symbol: string, timeframe: string): Observable<EmaMmaLevel[]> {
-    const params = new HttpParams().set('symbol', symbol).set('timeframe', timeframe);
+  getEmaMmaLevels(
+    symbol: string,
+    timeframe: string,
+  ): Observable<EmaMmaLevel[]> {
+    const params = new HttpParams()
+      .set('symbol', symbol)
+      .set('timeframe', timeframe);
     return this.http.get<EmaMmaLevel[]>(`${this.BASE}EmaMmaLevels`, { params });
   }
 
-  getVolumeProfiles(symbol: string, timeframe: string): Observable<VolumeProfile[]> {
-    const params = new HttpParams().set('symbol', symbol).set('timeframe', timeframe);
-    return this.http.get<VolumeProfile[]>(`${this.BASE}VolumeProfiles`, { params });
+  getVolumeProfiles(
+    symbol: string,
+    timeframe: string,
+  ): Observable<VolumeProfile[]> {
+    const params = new HttpParams()
+      .set('symbol', symbol)
+      .set('timeframe', timeframe);
+    return this.http.get<VolumeProfile[]>(`${this.BASE}VolumeProfiles`, {
+      params,
+    });
   }
 
   getBoxes(symbol: string, timeframe: string): Observable<BoxModel[]> {
-    const params = new HttpParams().set('symbol', symbol).set('timeframe', timeframe);
+    const params = new HttpParams()
+      .set('symbol', symbol)
+      .set('timeframe', timeframe);
     return this.http.get<BoxModel[]>(`${this.BASE}Boxes`, { params });
+  }
+
+  getOrders(): Observable<Order[]> {
+    return this.http.get<Order[]>(`${this.BASE}TradeOrders`);
+  }
+
+  deleteOrder(orderId: number): Observable<void> {
+    return this.http.delete<void>(`${this.BASE}TradeOrders/${orderId}`);
   }
 }
