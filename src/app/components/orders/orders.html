@@ -1,29 +1,28 @@
 <app-header></app-header>
 <div class="orders-container">
+    <button mat-button (click)="back()">back</button>
+    <button mat-button (click)="refresh()">refresh</button>
     <mat-card *ngFor="let order of orders" class="order-card">
         <mat-card-header>
-            <mat-card-title>{{ order.Symbol }}</mat-card-title>
-            <mat-card-subtitle>
-                {{ order.Direction }} • {{ order.Status }}
-            </mat-card-subtitle>
+            <mat-card-title>{{ order.Symbol }} • {{ order.Direction }} • {{ order.Status }}</mat-card-title>
         </mat-card-header>
 
         <mat-card-content>
             <div class="order-row">
                 <span>Entry:</span>
-                <span>{{ order.EntryPrice }}</span>
+                <span>$ {{ order.EntryPrice | number:'1.2-4' }}</span>
             </div>
             <div class="order-row">
                 <span>Stop Loss:</span>
-                <span>{{ order.StopLoss }}</span>
+                <span>$ {{ order.StopLoss | number:'1.2-4'}}</span>
             </div>
             <div class="order-row">
                 <span>Target 1:</span>
-                <span>{{ order.TargetPrice }}</span>
+                <span>$ {{ order.TargetPrice | number:'1.2-4' }}</span>
             </div>
             <div class="order-row">
                 <span>Target 2:</span>
-                <span>{{ order.Target2Price }}</span>
+                <span>$ {{ order.Target2Price | number:'1.2-4'}}</span>
             </div>
             <div class="order-row">
                 <span>Timeframe:</span>
@@ -31,15 +30,22 @@
             </div>
             <div class="order-row created-at">
                 <span>Created:</span>
-                <span>{{ order.CreatedAt | date:'short' }}</span>
+                <span>{{ order.CreatedAt | date:'HH:mm dd/MM/yyyy' }}</span>
             </div>
         </mat-card-content>
 
         <mat-card-actions>
-            <button mat-stroked-button color="{{ getStatusColor(order.Status) }}" disabled>
-                {{ order.Status }}
-            </button>
-            <button mat-stroked-button color="warn" (click)="deleteOrder(order.Id)">Delete</button>
+            <mat-card-actions>
+                <button mat-stroked-button color="{{ getStatusColor(order.Status) }}" disabled>
+                    {{ order.Status }}
+                </button>
+
+                <span class="spacer"></span>
+
+                <button mat-stroked-button color="warn" (click)="deleteOrder(order.Id)">
+                    Delete
+                </button>
+            </mat-card-actions>
         </mat-card-actions>
     </mat-card>
 </div>

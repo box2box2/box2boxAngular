@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { Order } from '../../modules/shared/models/order.dto';
 import { MarketService } from '../../modules/shared/http/market.service';
 import { HeaderComponent } from '../header/header.component';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-orders',
@@ -14,6 +15,7 @@ import { HeaderComponent } from '../header/header.component';
     CommonModule,
     HeaderComponent,
     HeaderComponent,
+    MatSnackBarModule
   ],
   templateUrl: './orders.html',
   styleUrl: './orders.scss',
@@ -21,7 +23,7 @@ import { HeaderComponent } from '../header/header.component';
 export class OrdersComponent implements OnInit {
   orders: Order[] = [];
 
-  constructor(private _marketService: MarketService) {}
+  constructor(private _marketService: MarketService, private _snackbar: MatSnackBar) {}
 
   ngOnInit(): void {
     this._marketService.getOrders().subscribe((data) => {
@@ -48,5 +50,17 @@ export class OrdersComponent implements OnInit {
       this.orders = this.orders.filter((order) => order.Id !== orderId);
       console.log(`Order with ID ${orderId} deleted.`);
     });
+  }
+
+  refresh(): void {
+    this._marketService.getOrders().subscribe((data) => {
+      this.orders = data;
+      console.log('Orders refreshed:', this.orders);
+      this._snackbar.open('Orders refreshed', 'Close', { duration: 2000 });
+    }); 
+  }
+
+  back(): void {
+    window.history.back();
   }
 }
