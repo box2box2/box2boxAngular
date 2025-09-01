@@ -61,6 +61,8 @@
                   "maximumError": "50mb"
                 }
               ],
+              "baseHref": "/box2boxAngular/",
+              "deployUrl": "/box2boxAngular/",
               "outputHashing": "all",
               "optimization": true,
               "sourceMap": false,
