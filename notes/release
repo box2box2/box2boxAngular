@@ -1,15 +1,5 @@
-ng build --output-path=dist/box2boxAngular --base-href "https://<your-username>.github.io/box2boxAngular/"
 
 
-ng build --configuration production --base-href "https://box2box2.github.io/box2boxAngular/"
-
-ng build --configuration production --base-href "https://box2box2.github.io/box2boxAngular/"
-
-
-npx angular-cli-ghpages --dir=dist/box2box/browser
-
-npm run deploy
-
-ng build --configuration production --base-href "https://box2box2.github.io/box2boxAngular/" --deploy-url "/box2boxAngular/"
-npx angular-cli-ghpages --dir=dist/box2box/browser
+ng build --configuration production --base-href "https://box2box2.github.io/box2boxAngular/" --deploy-url "/box2box/"
+npx angular-cli-ghpages --dir=dist/box2box
 

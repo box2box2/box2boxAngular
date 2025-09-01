@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment.prod';
 import { Order } from '../models/order.dto';
+import { WatchlistDTO } from '../models/watchlist.dto';
 
 export interface SymbolModel {
   Id: number;
@@ -137,5 +138,9 @@ export class MarketService {
 
   deleteOrder(orderId: number): Observable<void> {
     return this.http.delete<void>(`${this.BASE}TradeOrders/${orderId}`);
+  }
+
+  getWatchlist(): Observable<WatchlistDTO[]> {
+    return this.http.get<WatchlistDTO[]>(`${this.BASE}BoxWatchlist`);
   }
 }

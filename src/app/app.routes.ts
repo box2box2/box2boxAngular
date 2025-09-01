@@ -15,4 +15,5 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: 'bitcoin2', component: BitcoinCandleChartComponent },
   { path: 'orders', loadComponent: () => import('./components/orders/orders').then(m => m.OrdersComponent) },
+  { path: 'watchlist', loadComponent: () => import('./components/watchlist/watchlist').then(m => m.WatchlistComponent) },
 ];

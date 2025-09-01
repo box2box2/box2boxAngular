@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 
@@ -7,7 +8,7 @@ import { Router } from '@angular/router';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
   standalone: true,
-  imports: [MatIconModule],
+  imports: [MatIconModule, MatButton],
 })
 export class DashboardComponent {
   constructor(private _router: Router) {}
