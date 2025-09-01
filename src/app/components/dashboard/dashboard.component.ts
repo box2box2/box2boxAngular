@@ -1,19 +1,19 @@
 import { Component } from '@angular/core';
-import { HeaderComponent } from '../header/header.component';
 import { MatIconModule } from '@angular/material/icon';
-import { AppService } from '../../modules/shared/http/appService';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
   standalone: true,
-  imports: [HeaderComponent, MatIconModule],
+  imports: [MatIconModule],
 })
 export class DashboardComponent {
-  constructor(private _appService: AppService) {}
+  constructor(private _router: Router) {}
 
-  logout(): void {
-    this._appService.logout();
+  navigate(route: string): void {
+    console.log('navigating to', route);
+    this._router.navigate([`/${route}`]);
   }
 }

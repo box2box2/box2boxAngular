@@ -1,0 +1,30 @@
+.orders-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 8px;
+}
+
+.order-card {
+  border-radius: 16px;
+}
+
+.order-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 4px 0;
+
+  span:first-child {
+    font-weight: 500;
+    color: #666;
+  }
+
+  span:last-child {
+    font-weight: 600;
+  }
+}
+
+.created-at {
+  font-size: 0.8rem;
+  color: #999;
+}
