@@ -4,8 +4,8 @@
   "theme_color": "#1976d2",
   "background_color": "#ffffff",
   "display": "standalone",
-  "scope": "./",
-  "start_url": "./index.html",
+  "start_url": "/box2boxAngular/",
+  "scope": "/box2boxAngular/",
   "orientation": "portrait",
   "icons": [
     {
