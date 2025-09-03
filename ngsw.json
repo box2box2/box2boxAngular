@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1756920569199,
+  "timestamp": 1756922289902,
   "index": "/box2boxAngular/index.html",
   "assetGroups": [
     {
@@ -23,7 +23,7 @@
         "/box2boxAngular/chunk-YOJCJ5YK.js",
         "/box2boxAngular/chunk-YYGTNCTG.js",
         "/box2boxAngular/index.html",
-        "/box2boxAngular/main-Q2BAPN7X.js",
+        "/box2boxAngular/main-WKL6V6DM.js",
         "/box2boxAngular/polyfills-5CFQRCPP.js",
         "/box2boxAngular/styles-WB5WUP2A.css"
       ],
@@ -88,8 +88,8 @@
     "/box2boxAngular/chunk-YCVTXF77.js": "1879f52b75fb8189026ca45fad889a4bb0194913",
     "/box2boxAngular/chunk-YOJCJ5YK.js": "ae997b3f739bddf34339d80f714aa4c03a7eb031",
     "/box2boxAngular/chunk-YYGTNCTG.js": "99e8756f17556606bc698e6f11468994670f1aa3",
-    "/box2boxAngular/index.html": "9ed6cf592398a630c05807fad60628acc627e214",
-    "/box2boxAngular/main-Q2BAPN7X.js": "67e362cb3785e8eab0cd6c874c5a568482230044",
+    "/box2boxAngular/index.html": "42c8a42fa8d03e96a7329905bb13c0065b8315b7",
+    "/box2boxAngular/main-WKL6V6DM.js": "4a996b6ed83c0521ee3e10d2c216b42a2ce70c09",
     "/box2boxAngular/polyfills-5CFQRCPP.js": "f2241e9a25858f895ce299d15f6f22e849e2fd72",
     "/box2boxAngular/styles-WB5WUP2A.css": "4e4593246f0367091013aed48f3fc70a5cf657c9"
   },
