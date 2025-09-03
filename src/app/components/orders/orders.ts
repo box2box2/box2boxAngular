@@ -4,8 +4,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MarketService } from '../../modules/shared/http/market.service';
-import { OrderModel } from '../../modules/shared/models/TradeOrders.dto';
-import { HeaderComponent } from '../header/header.component';
+import {
+  OrderModel,
+  TradePlanModel,
+} from '../../modules/shared/models/TradeOrders.dto';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-orders',
@@ -13,15 +18,20 @@ import { HeaderComponent } from '../header/header.component';
     MatCardModule,
     MatButtonModule,
     CommonModule,
-    HeaderComponent,
-    HeaderComponent,
     MatSnackBarModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './orders.html',
   styleUrl: './orders.scss',
 })
 export class OrdersComponent implements OnInit {
   orders: OrderModel[] = [];
+  filteredOrders: OrderModel[] = [];
+  selectedStatus = '';
+  fullResult: TradePlanModel = new TradePlanModel();
+  loading = false;
 
   constructor(
     private _marketService: MarketService,
@@ -29,23 +39,28 @@ export class OrdersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loading = true;
     this._marketService.getTradeOrders().subscribe((data) => {
       this.orders = data.Orders;
+      this.fullResult = data;
+      this.filteredOrders = [...this.orders];
+      this.loading = false;
       console.log('Orders fetched:', this.orders);
     });
   }
 
-  getStatusColor(status: string): string {
-    switch (status) {
-      case 'NEW':
-        return 'accent';
-      case 'TARGET1':
-        return 'primary';
-      case 'TARGET2':
-        return 'warn';
-      default:
-        return '';
+  filterOrders(): void {
+    if (!this.selectedStatus) {
+      this.filteredOrders = [...this.orders]; // show all
+    } else {
+      this.filteredOrders = this.orders.filter(
+        (o) => o.Status === this.selectedStatus,
+      );
     }
+  }
+
+  getStatusColor(status: string): string {
+    return status === 'NEW' ? 'primary' : status === 'DONE' ? 'accent' : '';
   }
 
   deleteOrder(orderId: number): void {
@@ -56,9 +71,13 @@ export class OrdersComponent implements OnInit {
   }
 
   refresh(): void {
+    this.loading = true;
     this._marketService.getTradeOrders().subscribe((data) => {
       this.orders = data.Orders;
+      this.fullResult = data;
+      this.filteredOrders = [...this.orders];
       console.log('Orders refreshed:', this.orders);
+      this.loading = false;
       this._snackbar.open('Orders refreshed', 'Close', { duration: 2000 });
     });
   }
