@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment.prod';
 import { Order } from '../models/order.dto';
 import { WatchlistDTO } from '../models/watchlist.dto';
+import { TradePlanModel } from '../models/TradeOrders.dto';
 
 export interface SymbolModel {
   Id: number;
@@ -142,5 +143,9 @@ export class MarketService {
 
   getWatchlist(): Observable<WatchlistDTO[]> {
     return this.http.get<WatchlistDTO[]>(`${this.BASE}BoxWatchlist`);
+  }
+
+  getTradeOrders(): Observable<TradePlanModel> {
+    return this.http.get<TradePlanModel>(`${this.BASE}TradeOrders/pnl?stake=${10000}`);
   }
 }

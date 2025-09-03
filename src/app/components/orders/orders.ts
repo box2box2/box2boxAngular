@@ -2,10 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { Order } from '../../modules/shared/models/order.dto';
+import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MarketService } from '../../modules/shared/http/market.service';
+import { OrderModel } from '../../modules/shared/models/TradeOrders.dto';
 import { HeaderComponent } from '../header/header.component';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-orders',
@@ -15,19 +15,22 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     CommonModule,
     HeaderComponent,
     HeaderComponent,
-    MatSnackBarModule
+    MatSnackBarModule,
   ],
   templateUrl: './orders.html',
   styleUrl: './orders.scss',
 })
 export class OrdersComponent implements OnInit {
-  orders: Order[] = [];
+  orders: OrderModel[] = [];
 
-  constructor(private _marketService: MarketService, private _snackbar: MatSnackBar) {}
+  constructor(
+    private _marketService: MarketService,
+    private _snackbar: MatSnackBar,
+  ) {}
 
   ngOnInit(): void {
-    this._marketService.getOrders().subscribe((data) => {
-      this.orders = data;
+    this._marketService.getTradeOrders().subscribe((data) => {
+      this.orders = data.Orders;
       console.log('Orders fetched:', this.orders);
     });
   }
@@ -53,11 +56,11 @@ export class OrdersComponent implements OnInit {
   }
 
   refresh(): void {
-    this._marketService.getOrders().subscribe((data) => {
-      this.orders = data;
+    this._marketService.getTradeOrders().subscribe((data) => {
+      this.orders = data.Orders;
       console.log('Orders refreshed:', this.orders);
       this._snackbar.open('Orders refreshed', 'Close', { duration: 2000 });
-    }); 
+    });
   }
 
   back(): void {
