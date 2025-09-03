@@ -1,0 +1,13 @@
+.chart-wrapper {
+  width: 100%;
+  height: 100vh; // full mobile height
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chart-container {
+  width: 100%;
+  height: 90%; // leave space for navbar
+  padding: 0.5rem;
+}
