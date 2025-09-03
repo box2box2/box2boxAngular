@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
+import { UpdateService } from '../../services/update.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,7 +12,10 @@ import { Router } from '@angular/router';
   imports: [MatIconModule, MatButton],
 })
 export class DashboardComponent {
-  constructor(private _router: Router) {}
+  constructor(
+    private _router: Router,
+    private _updateService: UpdateService,
+  ) {}
 
   async showNotification(): Promise<void> {
     if ('Notification' in window) {
@@ -32,5 +36,9 @@ export class DashboardComponent {
   navigate(route: string): void {
     console.log('navigating to', route);
     this._router.navigate([`/${route}`]);
+  }
+
+  checkForUpdates(): void {
+    this._updateService.checkForUpdate();
   }
 }
