@@ -8,20 +8,31 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { NgChartsModule } from 'ng2-charts';
 
-import { Chart as ChartJS, TimeScale, Tooltip, Legend, Title } from 'chart.js';
+import {
+  Chart as ChartJS,
+  TimeScale,
+  Tooltip,
+  Legend,
+  Title,
+  LinearScale,
+} from 'chart.js';
 import {
   CandlestickController,
   CandlestickElement,
 } from 'chartjs-chart-financial';
+import zoomPlugin from 'chartjs-plugin-zoom';
 import 'chartjs-adapter-date-fns';
 
+// Register Chart.js plugins and controllers
 ChartJS.register(
   TimeScale,
+  LinearScale,
   Tooltip,
   Legend,
   Title,
   CandlestickController,
   CandlestickElement,
+  zoomPlugin,
 );
 
 @Component({
@@ -85,6 +96,21 @@ export class ChartTestComponent {
     plugins: {
       legend: { display: false },
       tooltip: { mode: 'index', intersect: false },
+      zoom: {
+        pan: {
+          enabled: true,
+          mode: 'x', // allow panning on x-axis
+        },
+        zoom: {
+          wheel: {
+            enabled: true, // zoom with mouse wheel
+          },
+          pinch: {
+            enabled: true, // zoom with pinch gesture on mobile
+          },
+          mode: 'x', // zoom along x-axis
+        },
+      },
     },
     scales: {
       x: {
@@ -98,4 +124,11 @@ export class ChartTestComponent {
       },
     },
   };
+
+  resetZoom(): void {
+    const chart = ChartJS.getChart('0'); // grabs the first chart
+    if (chart) {
+      (chart as any).resetZoom();
+    }
+  }
 }
