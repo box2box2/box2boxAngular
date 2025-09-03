@@ -13,6 +13,22 @@ import { Router } from '@angular/router';
 export class DashboardComponent {
   constructor(private _router: Router) {}
 
+  async showNotification(): Promise<void> {
+    if ('Notification' in window) {
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        new Notification('Hello from Box2Box!', {
+          body: 'This is a test push notification 🚀',
+          icon: 'assets/icons/icon-192x192.png',
+        });
+      } else {
+        console.warn('Notifications permission not granted:', permission);
+      }
+    } else {
+      console.warn('This browser does not support notifications.');
+    }
+  }
+
   navigate(route: string): void {
     console.log('navigating to', route);
     this._router.navigate([`/${route}`]);
