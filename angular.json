@@ -30,6 +30,7 @@
               "src/favicon.ico",
               "src/assets",
               "src/manifest.json",
+              "src/version.json",
               {
                 "glob": "mdi.svg",
                 "input": "node_modules/@mdi/angular-material",
@@ -106,6 +107,7 @@
               "src/favicon.ico",
               "src/assets",
               "src/manifest.json",
+              "src/version.json",
               {
                 "glob": "mdi.svg",
                 "input": "node_modules/@mdi/angular-material",
