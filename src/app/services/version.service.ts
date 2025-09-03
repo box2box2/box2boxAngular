@@ -9,7 +9,10 @@ export class VersionService {
 
   loadLocalVersion(): Promise<string | null> {
     return this.http
-      .get<{ version: string }>('/version.json')
+      .get<{ version: string }>('assets/version.json', {
+        headers: { 'Cache-Control': 'no-cache' },
+      })
+
       .toPromise()
       .then((data) => {
         if (data) {
@@ -21,7 +24,7 @@ export class VersionService {
 
   checkRemoteVersion(): Promise<void> {
     return this.http
-      .get<{ version: string }>('/version.json', {
+      .get<{ version: string }>('assets/version.json', {
         headers: { 'Cache-Control': 'no-cache' },
       })
       .toPromise()
