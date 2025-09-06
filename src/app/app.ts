@@ -3,11 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { VersionService } from './services/version.service';
+import { FooterComponent } from './components/footer-compenent/footer-compenent';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, FooterComponent],
   templateUrl: './app.html',
   styleUrls: ['./app.css'],
 })
