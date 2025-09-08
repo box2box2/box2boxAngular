@@ -1,3 +1,23 @@
+.watchlist-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%; // so scroll works
+}
+
+.scrollable-list {
+  flex: 1;
+  overflow-y: auto; // 👈 enables scrolling
+  padding: 8px;
+}
+
+.group-label {
+  margin: 12px 0 4px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #3f51b5;
+  text-transform: uppercase;
+}
+
 .watchlist-row-card {
   display: flex;
   flex-direction: column;
@@ -10,15 +30,6 @@
   display: flex;
   justify-content: space-between;
   font-weight: 600;
-
-  .symbol {
-    font-size: 14px;
-  }
-
-  .timeframe {
-    font-size: 12px;
-    color: gray;
-  }
 }
 
 .row-bottom {
@@ -39,7 +50,6 @@
 
     .bear,
     .short {
-      // 👈 both will be red
       background: #e57373;
       color: white;
     }
@@ -47,6 +57,11 @@
     .bull,
     .long {
       background: #81c784;
+      color: white;
+    }
+
+    .divergence {
+      background: #64b5f6;
       color: white;
     }
 
@@ -59,10 +74,13 @@
   .created {
     font-size: 11px;
     color: gray;
-    margin-left: auto; // pushes timestamp to the right
+    margin-left: auto;
   }
+}
 
-  button {
-    margin-left: 4px;
-  }
+.header-actions {
+  display: flex;
+  justify-content: flex-start; // or center / space-between depending on look
+  gap: 8px; // space between buttons
+  margin: 8px;
 }

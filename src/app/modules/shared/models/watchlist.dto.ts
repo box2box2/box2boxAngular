@@ -10,4 +10,5 @@ export class WatchlistDTO {
   TradePlanId = 0;
   CreatedAt = '';
   Status = '';
+  MonitoringStatus = '';
 }

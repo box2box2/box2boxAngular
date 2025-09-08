@@ -28,6 +28,14 @@ export class WatchlistComponent implements OnInit {
     private _snackbar: MatSnackBar,
   ) {}
 
+  get btcDivItems(): WatchlistDTO[] {
+    return this.watchlist?.filter((i) => i.Status === 'BTC-DIV') ?? [];
+  }
+
+  get otherItems(): WatchlistDTO[] {
+    return this.watchlist?.filter((i) => i.Status !== 'BTC-DIV') ?? [];
+  }
+
   ngOnInit(): void {
     this._marketService.getWatchlist().subscribe((data) => {
       this.watchlist = data;
