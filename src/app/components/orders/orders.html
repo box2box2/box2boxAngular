@@ -123,6 +123,12 @@
                 <span>Failure Reason:</span>
                 <span>{{ order.FailureReason }}</span>
             </div>
+
+            <div class="order-row actions">
+                <button mat-stroked-button color="primary" (click)="goToChart(order.Symbol)">
+                    Open Chart
+                </button>
+            </div>
         </mat-card-content>
     </mat-card>
 

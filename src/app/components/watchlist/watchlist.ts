@@ -7,6 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButton } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-watchlist',
@@ -26,6 +27,7 @@ export class WatchlistComponent implements OnInit {
   constructor(
     private _marketService: MarketService,
     private _snackbar: MatSnackBar,
+    private router: Router,
   ) {}
 
   get btcDivItems(): WatchlistDTO[] {
@@ -41,6 +43,10 @@ export class WatchlistComponent implements OnInit {
       this.watchlist = data;
       console.log('watchlist fetched:', this.watchlist);
     });
+  }
+
+  goToChart(symbol: string): void {
+    this.router.navigate(['/chartTest', symbol]); // 👈 go to chart with symbol
   }
 
   refresh(): void {

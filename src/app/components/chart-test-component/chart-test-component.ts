@@ -4,7 +4,10 @@ import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import {
+  MAT_FORM_FIELD_DEFAULT_OPTIONS,
+  MatFormFieldModule,
+} from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { NgChartsModule } from 'ng2-charts';
 
@@ -30,6 +33,8 @@ import {
   SymbolModel,
   VolumeProfile,
 } from '../../modules/shared/http/market.service';
+import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 // Register Chart.js plugins and controllers
 ChartJS.register(
@@ -54,9 +59,16 @@ ChartJS.register(
     MatButtonToggleModule,
     MatCheckboxModule,
     MatButtonModule,
+    FormsModule,
   ],
   templateUrl: './chart-test-component.html',
   styleUrls: ['./chart-test-component.scss'],
+  providers: [
+    {
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+      useValue: { appearance: 'outline', subscriptSizing: 'dynamic' },
+    },
+  ],
 })
 export class ChartTestComponent implements OnInit {
   chartData: any = {
@@ -101,13 +113,21 @@ export class ChartTestComponent implements OnInit {
   chartOptions: any = {
     responsive: true,
     maintainAspectRatio: false,
+    layout: {
+      padding: {
+        bottom: 50, // 👈 leave space for footer (adjust to match footer height)
+      },
+    },
     plugins: {
       legend: { display: false },
-      tooltip: { mode: 'index', intersect: true }, // 👈 this line
+      tooltip: { mode: 'index', intersect: true },
       zoom: {
         pan: { enabled: true, mode: 'x' },
         zoom: {
-          wheel: { enabled: true },
+          wheel: {
+            enabled: true,
+            speed: 0.4, // 👈 smaller = faster zoom (default ~0.001)
+          },
           pinch: { enabled: true },
           mode: 'x',
         },
@@ -156,11 +176,45 @@ export class ChartTestComponent implements OnInit {
 
   private mainDatasetCount = 1;
 
-  constructor(private chartService: BitcoinCandleChartService) {}
+  constructor(
+    private chartService: BitcoinCandleChartService,
+    private route: ActivatedRoute,
+  ) {}
 
   ngOnInit(): void {
+    this.route.paramMap.subscribe((params) => {
+      const symbol = params.get('symbol');
+
+      if (symbol) {
+        // param provided → use it
+        this.selectedSymbol = symbol;
+      } else {
+        // no param → fallback default
+        this.selectedSymbol = this.selectedSymbol || 'BTCUSDT';
+      }
+
+      this.loadCandles();
+    });
+
     this.loadSymbols();
+  }
+
+  onTimeframeChange(tf: string): void {
+    this.selectedTimeframe = tf;
     this.loadCandles();
+    this.updateChartOptionsForTimeframe(tf);
+    console.log('Selected timeframe:', tf);
+  }
+
+  onSymbolChange(symbol: string): void {
+    this.selectedSymbol = symbol;
+
+    // 🔥 Do whatever you want here:
+    // For example reload candles:
+    this.loadCandles();
+
+    // Or log/debug
+    console.log('Selected symbol:', symbol);
   }
 
   updateChartOptionsForTimeframe(tf: string): void {
@@ -227,6 +281,41 @@ export class ChartTestComponent implements OnInit {
       });
   }
 
+  ensureOverlaysLoaded(): void {
+    // if (this.showFib) {
+    //   this.chartService
+    //     .getFibLevels(this.selectedSymbol, this.selectedTimeframe)
+    //     .subscribe((arr) => {
+    //       this.fibLevels = arr;
+    //       this.refreshOverlays();
+    //     });
+    // }
+    // if (this.showEmaMma || this.showVwap) {
+    //   this.chartService
+    //     .getEmaMmaLevels(this.selectedSymbol, this.selectedTimeframe)
+    //     .subscribe((arr) => {
+    //       this.emaMmaLevels = arr;
+    //       this.refreshOverlays();
+    //     });
+    // }
+    // if (this.showVolumeProfile) {
+    //   this.chartService
+    //     .getVolumeProfiles(this.selectedSymbol, this.selectedTimeframe)
+    //     .subscribe((arr) => {
+    //       this.volumeProfiles = arr;
+    //       this.refreshOverlays();
+    //     });
+    // }
+    if (this.showBoxes) {
+      this.chartService.getBoxes(this.selectedSymbol).subscribe((arr) => {
+        this.boxes = arr.filter(
+          (b: any) => ((b.Type || b.type || '') + '').toLowerCase() === 'range',
+        );
+        this.refreshOverlays();
+      });
+    }
+  }
+
   private mapCandlesToChartData(candles: Candle[]): void {
     const ds = (candles || []).map((c) => ({
       x: new Date(c.Time).getTime(),
@@ -243,41 +332,6 @@ export class ChartTestComponent implements OnInit {
     this.mainDatasetCount = this.chartData.datasets.length;
   }
 
-  private ensureOverlaysLoaded(): void {
-    if (this.showFib) {
-      this.chartService
-        .getFibLevels(this.selectedSymbol, this.selectedTimeframe)
-        .subscribe((arr) => {
-          this.fibLevels = arr;
-          this.refreshOverlays();
-        });
-    }
-    if (this.showEmaMma || this.showVwap) {
-      this.chartService
-        .getEmaMmaLevels(this.selectedSymbol, this.selectedTimeframe)
-        .subscribe((arr) => {
-          this.emaMmaLevels = arr;
-          this.refreshOverlays();
-        });
-    }
-    if (this.showVolumeProfile) {
-      this.chartService
-        .getVolumeProfiles(this.selectedSymbol, this.selectedTimeframe)
-        .subscribe((arr) => {
-          this.volumeProfiles = arr;
-          this.refreshOverlays();
-        });
-    }
-    if (this.showBoxes) {
-      this.chartService.getBoxes(this.selectedSymbol).subscribe((arr) => {
-        this.boxes = arr.filter(
-          (b: any) => ((b.Type || b.type || '') + '').toLowerCase() === 'range',
-        );
-        this.refreshOverlays();
-      });
-    }
-  }
-
   private refreshOverlays(): void {
     this.chartData.datasets = this.chartData.datasets.slice(
       0,
@@ -290,10 +344,52 @@ export class ChartTestComponent implements OnInit {
     if (this.showVolumeProfile && this.volumeProfiles.length)
       this.addVolumeProfileDatasets();
 
+    if (this.showBoxes && this.boxes.length) this.addBoxesDatasets(); // 👈
+
     this.chartData = {
       datasets: [...(this.chartData.datasets as any[])],
     };
     this.resetZoom();
+  }
+
+  private addBoxesDatasets(): void {
+    if (!this.boxes?.length) return;
+
+    const candleDs = this.chartData.datasets[0]?.data as
+      | Array<{ x: number }>
+      | undefined;
+    if (!candleDs || candleDs.length < 2) return;
+
+    // Chart range: earliest and latest candle
+    const xMin = candleDs[0].x;
+    const xMax = candleDs[candleDs.length - 1].x;
+
+    const overlays = this.boxes.map((b) => {
+      const color =
+        b.Color ||
+        (b.PositionType === 'Short'
+          ? 'rgba(255,0,0,0.4)'
+          : 'rgba(0,200,0,0.4)');
+
+      return {
+        type: 'line' as const,
+        label: `Box ${b.Id}`,
+        data: [
+          { x: xMin, y: b.ZoneMin }, // bottom left
+          { x: xMax, y: b.ZoneMin }, // bottom right
+          { x: xMax, y: b.ZoneMax }, // top right
+          { x: xMin, y: b.ZoneMax }, // top left
+          { x: xMin, y: b.ZoneMin }, // close box
+        ],
+        borderColor: color,
+        borderWidth: 2,
+        backgroundColor: 'transparent', // 🚫 no fill
+        fill: false, // 🚫 disable fill
+        pointRadius: 0,
+      };
+    });
+
+    this.chartData.datasets.push(...overlays);
   }
 
   private addFibDatasets(): void {

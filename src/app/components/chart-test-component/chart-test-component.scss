@@ -1,13 +1,63 @@
 .chart-wrapper {
+  position: relative;
   width: 100%;
-  height: 94vh; // full mobile height
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  height: calc(100vh - 60px); // chart takes full screen (minus navbar)
+  overflow: hidden; // 👈 prevent extra scrollbar
 }
 
 .chart-container {
   width: 100%;
-  height: 90%; // leave space for navbar
-  padding: 0.5rem;
+  height: 100%;
 }
+
+/* Footer now floats over chart */
+.chart-footer {
+  position: absolute; // 👈 overlay at bottom
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 4px 10px;
+  border-top: 1px solid #ccc;
+  background: #fafafa;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  height: 44px; // 👈 same height as your bottom navbar
+}
+
+/* Compact Material components */
+::ng-deep .chart-footer .mat-form-field {
+  margin: 0;
+  height: 32px;
+}
+
+::ng-deep .chart-footer .mat-form-field-infix {
+  padding: 0 !important;          // remove extra padding
+  min-height: 32px !important;    // shrink input height
+  display: flex;
+  align-items: center;
+}
+
+::ng-deep .chart-footer .mat-select-trigger {
+  height: 32px;
+  display: flex;
+  align-items: center;
+  font-size: 13px;                 // smaller font size
+}
+
+/* Compact dropdown options */
+::ng-deep .mat-mdc-option {
+  min-height: 32px !important;
+  font-size: 13px;
+  padding: 0 12px !important;
+  display: flex;
+  align-items: center;
+}
+
+::ng-deep .chart-footer .mat-mdc-checkbox {
+  transform: scale(0.9);
+}
+

@@ -11,6 +11,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-orders',
@@ -36,6 +37,7 @@ export class OrdersComponent implements OnInit {
   constructor(
     private _marketService: MarketService,
     private _snackbar: MatSnackBar,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -47,6 +49,10 @@ export class OrdersComponent implements OnInit {
       this.loading = false;
       console.log('Orders fetched:', this.orders);
     });
+  }
+
+  goToChart(symbol: string): void {
+    this.router.navigate(['/chartTest', symbol]); // 👈 go to chart with symbol
   }
 
   filterOrders(): void {

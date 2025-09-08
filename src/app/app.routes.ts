@@ -15,7 +15,18 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'bitcoin2', component: BitcoinCandleChartComponent },
-  { path: 'orders', loadComponent: () => import('./components/orders/orders').then(m => m.OrdersComponent) },
-  { path: 'watchlist', loadComponent: () => import('./components/watchlist/watchlist').then(m => m.WatchlistComponent) },
-  { path: 'chartTest', component: ChartTestComponent },
+  {
+    path: 'orders',
+    loadComponent: () =>
+      import('./components/orders/orders').then((m) => m.OrdersComponent),
+  },
+  {
+    path: 'watchlist',
+    loadComponent: () =>
+      import('./components/watchlist/watchlist').then(
+        (m) => m.WatchlistComponent,
+      ),
+  },
+  { path: 'chartTest', component: ChartTestComponent }, // 👈 default chart
+  { path: 'chartTest/:symbol', component: ChartTestComponent }, // 👈 chart with symbol
 ];
