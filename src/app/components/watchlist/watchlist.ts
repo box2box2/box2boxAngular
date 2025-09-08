@@ -5,10 +5,18 @@ import { MarketService } from '../../modules/shared/http/market.service';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButton } from '@angular/material/button';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-watchlist',
-  imports: [CommonModule, MatCardModule, MatButton],
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatButton,
+    MatChipsModule,
+    MatIconModule,
+  ],
   templateUrl: './watchlist.html',
   styleUrl: './watchlist.scss',
 })
@@ -37,5 +45,14 @@ export class WatchlistComponent implements OnInit {
 
   back(): void {
     window.history.back();
+  }
+
+  remove(item: WatchlistDTO): void {
+    //this._marketService.removeFromWatchlist(item.Id).subscribe(() => {
+    //  this.watchlist = this.watchlist.filter(w => w.Id !== item.Id);
+    this._snackbar.open(`Removed ${item.Symbol} from watchlist`, 'Close', {
+      duration: 2000,
+    });
+    //});
   }
 }

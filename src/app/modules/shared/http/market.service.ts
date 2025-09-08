@@ -142,7 +142,7 @@ export class MarketService {
   }
 
   getWatchlist(): Observable<WatchlistDTO[]> {
-    return this.http.get<WatchlistDTO[]>(`${this.BASE}BoxWatchlist`);
+    return this.http.get<WatchlistDTO[]>(`${this.BASE}BoxWatchlist/enriched`);
   }
 
   getTradeOrders(): Observable<TradePlanModel> {

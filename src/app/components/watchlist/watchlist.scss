@@ -1,0 +1,68 @@
+.watchlist-row-card {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  border-left: 4px solid #3f51b5;
+}
+
+.row-top {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+
+  .symbol {
+    font-size: 14px;
+  }
+
+  .timeframe {
+    font-size: 12px;
+    color: gray;
+  }
+}
+
+.row-bottom {
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .chip-list {
+    display: flex;
+    gap: 4px;
+
+    mat-chip {
+      height: 22px;
+      font-size: 12px;
+      padding: 0 6px;
+    }
+
+    .bear,
+    .short {
+      // 👈 both will be red
+      background: #e57373;
+      color: white;
+    }
+
+    .bull,
+    .long {
+      background: #81c784;
+      color: white;
+    }
+
+    .none {
+      background: #bdbdbd;
+      color: white;
+    }
+  }
+
+  .created {
+    font-size: 11px;
+    color: gray;
+    margin-left: auto; // pushes timestamp to the right
+  }
+
+  button {
+    margin-left: 4px;
+  }
+}
