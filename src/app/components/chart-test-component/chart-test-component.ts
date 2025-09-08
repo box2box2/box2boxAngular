@@ -103,43 +103,36 @@ export class ChartTestComponent implements OnInit {
     maintainAspectRatio: false,
     plugins: {
       legend: { display: false },
-      tooltip: { mode: 'index', intersect: false },
+      tooltip: { mode: 'index', intersect: true }, // 👈 this line
       zoom: {
-        pan: {
-          enabled: true,
-          mode: 'x', // allow panning on x-axis
-        },
+        pan: { enabled: true, mode: 'x' },
         zoom: {
-          wheel: {
-            enabled: true, // zoom with mouse wheel
-          },
-          pinch: {
-            enabled: true, // zoom with pinch gesture on mobile
-          },
-          mode: 'x', // zoom along x-axis
+          wheel: { enabled: true },
+          pinch: { enabled: true },
+          mode: 'x',
         },
       },
     },
     scales: {
-      //! TODO fix datetime for selected tiem frame
       x: {
         type: 'time',
         time: {
-          unit: 'day', // still group by day
+          unit: 'day',
           tooltipFormat: 'MMM dd',
-          displayFormats: {
-            day: 'MMM dd', // ensures every tick is formatted as "Apr 01"
-          },
+          displayFormats: { day: 'MMM dd' },
         },
         ticks: {
-          autoSkip: false, // ✅ show all ticks instead of skipping
-          maxRotation: 0, // ✅ keep labels horizontal
+          autoSkip: false,
+          maxRotation: 0,
           minRotation: 0,
         },
       },
       y: {
+        position: 'right', // 👈 moves prices to the right side
         beginAtZero: false,
-        ticks: { callback: (val: any) => val.toFixed(2) },
+        ticks: {
+          callback: (val: any) => val.toFixed(2),
+        },
       },
     },
   };
@@ -170,6 +163,43 @@ export class ChartTestComponent implements OnInit {
     this.loadCandles();
   }
 
+  updateChartOptionsForTimeframe(tf: string): void {
+    let maxTicks = 10;
+
+    switch (tf) {
+      case '1m':
+      case '5m':
+      case '15m':
+        maxTicks = 6;
+        break;
+      case '1h':
+      case '4h':
+        maxTicks = 10;
+        break;
+      case '1d':
+      case '1w':
+      case '1y':
+        maxTicks = 12;
+        break;
+    }
+
+    // 👇 reassign new object so Angular notices
+    this.chartOptions = {
+      ...this.chartOptions,
+      scales: {
+        ...this.chartOptions.scales,
+        x: {
+          ...this.chartOptions.scales.x,
+          ticks: {
+            ...this.chartOptions.scales.x.ticks,
+            maxTicksLimit: maxTicks,
+            autoSkip: true,
+          },
+        },
+      },
+    };
+  }
+
   resetZoom(): void {
     const chart = ChartJS.getChart('0'); // grabs the first chart
     if (chart) {
@@ -186,13 +216,14 @@ export class ChartTestComponent implements OnInit {
     });
   }
 
-  loadCandles(limit = 250): void {
+  loadCandles(limit = 100): void {
     if (!this.selectedSymbol) return;
     this.chartService
       .getCandles(this.selectedSymbol, this.selectedTimeframe, limit)
       .subscribe((candles) => {
         this.mapCandlesToChartData(candles);
         this.ensureOverlaysLoaded();
+        this.updateChartOptionsForTimeframe(this.selectedTimeframe);
       });
   }
 
