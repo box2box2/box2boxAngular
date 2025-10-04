@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1758867957788,
+  "timestamp": 1759574651797,
   "index": "/box2boxAngular/index.html",
   "assetGroups": [
     {
@@ -21,7 +21,7 @@
         "/box2boxAngular/chunk-NZU24HLP.js",
         "/box2boxAngular/chunk-PT2JM3JA.js",
         "/box2boxAngular/index.html",
-        "/box2boxAngular/main-XUV74KQM.js",
+        "/box2boxAngular/main-CD7PXX2W.js",
         "/box2boxAngular/polyfills-5CFQRCPP.js",
         "/box2boxAngular/styles-WB5WUP2A.css"
       ],
@@ -75,8 +75,8 @@
     "/box2boxAngular/assets/icons/icon-512x512.png": "e77e46396cbfa8e3296ba10146886e4e5313a341",
     "/box2boxAngular/assets/icons/icon-72x72.png": "168a49f3d55bdac996560e30bafae6d01fa5fc4a",
     "/box2boxAngular/assets/icons/icon-96x96.png": "bd4d50c0d46a10c03ef35b5555fa5f7d82490840",
-    "/box2boxAngular/assets/mdi.svg": "e1124ac45a82484c5e29b0da9de2451689452151",
-    "/box2boxAngular/assets/version.json": "032b86cff9a059144b97cfed62a08e911b8e7ad3",
+    "/box2boxAngular/assets/mdi.svg": "6f03145d7236a998cef9e6b32701a080c6a2ba37",
+    "/box2boxAngular/assets/version.json": "9334e803f5cb29d67af31ee3a5805a73021408ef",
     "/box2boxAngular/chunk-5BQK75FM.js": "a02a47933915ead2ec19f090154e129d61accacc",
     "/box2boxAngular/chunk-665CB4IZ.js": "7e534b321483b0dd5bec4c15e46e31212a3ec734",
     "/box2boxAngular/chunk-DAJM3L7J.js": "0bf894de74d51088dc64b9d0239709dd145782a7",
@@ -86,8 +86,8 @@
     "/box2boxAngular/chunk-KEY2JCN3.js": "217e86d3cfa371017db097e41cc3a412acd8893c",
     "/box2boxAngular/chunk-NZU24HLP.js": "439cad80ce8e90d0903ea602e462de88ad5ac843",
     "/box2boxAngular/chunk-PT2JM3JA.js": "9dc35024c3d9a08bb348b817b8548d8be75e16d5",
-    "/box2boxAngular/index.html": "10e2b80634d43ca4cb18ee437044c5612c200e46",
-    "/box2boxAngular/main-XUV74KQM.js": "80755741c8edca819c553a8039c5bb2f8a5b784e",
+    "/box2boxAngular/index.html": "16d2494fca11852b522afaf74b4006599429b1f6",
+    "/box2boxAngular/main-CD7PXX2W.js": "0677ff9c4f6d2dc10873f5902a6ad00ddfca7e57",
     "/box2boxAngular/polyfills-5CFQRCPP.js": "f2241e9a25858f895ce299d15f6f22e849e2fd72",
     "/box2boxAngular/styles-WB5WUP2A.css": "4e4593246f0367091013aed48f3fc70a5cf657c9"
   },
