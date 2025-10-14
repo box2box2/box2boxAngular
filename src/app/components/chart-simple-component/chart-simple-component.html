@@ -1,0 +1,44 @@
+<div class="chart-wrapper">
+  <!-- ⚙️ Settings toggle button -->
+  <button
+    mat-icon-button
+    class="settings-btn"
+    (click)="toggleSettings()"
+    aria-label="Settings"
+  >
+    <mat-icon>settings</mat-icon>
+  </button>
+
+  <!-- ⚙️ Settings panel -->
+  <div class="settings-panel" *ngIf="showSettings">
+    <mat-checkbox [(ngModel)]="showBoxes" (change)="onBoxesToggle()">
+      Show Boxes
+    </mat-checkbox>
+
+    <mat-form-field appearance="outline" class="symbol-select">
+      <mat-label>Symbol</mat-label>
+      <mat-select
+        [(value)]="selectedSymbol"
+        (selectionChange)="onSymbolChange($event.value)"
+      >
+        <mat-option *ngFor="let s of symbols" [value]="s">
+          {{ s.SymbolName }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!-- 📊 Chart -->
+  <div
+    class="chart-container"
+    (dblclick)="onChartDblClick()"
+    (touchend)="onChartDblClick()"
+  >
+    <canvas
+      baseChart
+      [data]="chartData"
+      [options]="chartOptions"
+      [type]="'candlestick'"
+    ></canvas>
+  </div>
+</div>
