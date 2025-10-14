@@ -7,11 +7,11 @@ import { WatchlistDTO } from '../models/watchlist.dto';
 import { Exchange, TradePlanModel } from '../models/TradeOrders.dto';
 import { AppService } from './appService';
 
-export interface SymbolModel {
-  Id: number;
-  SymbolName: string;
-  Active: boolean;
-  RunStatus: string;
+export class SymbolModel {
+  Id = 0;
+  SymbolName = '';
+  Active = false;
+  RunStatus = '';
 }
 
 export interface Candle {
