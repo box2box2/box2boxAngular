@@ -1,7 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+<<<<<<< HEAD
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+=======
+import { FormsModule } from '@angular/forms';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+>>>>>>> b6f1f2ffdd662d629d24deeb02bea14c7977883e
 import { NgChartsModule, BaseChartDirective } from 'ng2-charts';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -89,6 +94,7 @@ ChartJS.defaults.datasets.line.clip = false;
 })
 export class ChartSimpleComponent implements OnInit {
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+  @ViewChild('chartCanvas', { read: ElementRef }) chartCanvas?: ElementRef;
 
   chartData: any = { datasets: [] };
   boxes: any[] = [];
@@ -133,17 +139,7 @@ export class ChartSimpleComponent implements OnInit {
     scales: {
       x: {
         type: 'time',
-        time: {
-          unit: 'day',
-          tooltipFormat: 'MMM dd',
-          displayFormats: { day: 'MMM dd' },
-        },
-        grid: { color: '#2a2a2a', borderColor: '#555' },
-        ticks: {
-          color: '#aaa',
-          autoSkip: true,
-          maxTicksLimit: window.innerWidth < 500 ? 4 : 8,
-        },
+        display: false, // Hide x-axis for cleaner look
       },
       y: {
         position: 'right',
@@ -154,11 +150,12 @@ export class ChartSimpleComponent implements OnInit {
           callback: (val: any) => this.formatYAxisTicks(Number(val)),
           maxTicksLimit: 12,
         },
-        afterBuildTicks: (axis: any) =>
-          (axis.ticks = axis.ticks.filter((_: any, i: number) => i % 2 === 0)),
       },
     },
-    layout: { backgroundColor: '#0d1117' },
+    layout: { 
+      backgroundColor: '#131722',
+      padding: { top: 10, right: 10, bottom: 10, left: 10 }
+    },
   };
 
   constructor(
@@ -167,6 +164,10 @@ export class ChartSimpleComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loadSymbols();
+  }
+
+  private loadSymbols(): void {
     this.marketService.getSymbols().subscribe((symbols) => {
       this.symbols = symbols;
       if (!symbols?.length) return;
