@@ -1,12 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonModule } from '@angular/common';
-<<<<<<< HEAD
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-=======
-import { FormsModule } from '@angular/forms';
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
->>>>>>> b6f1f2ffdd662d629d24deeb02bea14c7977883e
 import { NgChartsModule, BaseChartDirective } from 'ng2-charts';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -167,7 +162,7 @@ export class ChartSimpleComponent implements OnInit {
     this.loadSymbols();
   }
 
-  private loadSymbols(): void {
+  loadSymbols(): void {
     this.marketService.getSymbols().subscribe((symbols) => {
       this.symbols = symbols;
       if (!symbols?.length) return;
