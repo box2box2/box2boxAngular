@@ -28,6 +28,7 @@ import {
   MarketService,
   SymbolModel,
 } from '../../modules/shared/http/market.service';
+import { AppService } from '../../modules/shared/http/appService';
 
 //
 // 📍 Crosshair plugin
@@ -156,6 +157,7 @@ export class ChartSimpleComponent implements OnInit {
   constructor(
     private marketService: MarketService,
     private route: ActivatedRoute,
+    private appService: AppService
   ) {}
 
   ngOnInit(): void {
