@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1760795954176,
+  "timestamp": 1760797021167,
   "index": "/box2boxAngular/index.html",
   "assetGroups": [
     {
@@ -11,18 +11,18 @@
         "ignoreVary": true
       },
       "urls": [
-        "/box2boxAngular/chunk-3CTQMKFP.js",
-        "/box2boxAngular/chunk-4OET5RPO.js",
-        "/box2boxAngular/chunk-5B4M6U5J.js",
+        "/box2boxAngular/chunk-6TVKJG7X.js",
+        "/box2boxAngular/chunk-7DOWAOHZ.js",
+        "/box2boxAngular/chunk-AMPK5AGD.js",
         "/box2boxAngular/chunk-PT2JM3JA.js",
-        "/box2boxAngular/chunk-SR6INIW2.js",
         "/box2boxAngular/chunk-SV2CK4FE.js",
+        "/box2boxAngular/chunk-V2HIS6HA.js",
         "/box2boxAngular/chunk-YNJOUGYY.js",
-        "/box2boxAngular/chunk-ZD36QQXX.js",
+        "/box2boxAngular/chunk-Z7P5J3CC.js",
         "/box2boxAngular/index.html",
-        "/box2boxAngular/main-I5SMEJ6L.js",
+        "/box2boxAngular/main-QK7OCLDL.js",
         "/box2boxAngular/polyfills-5CFQRCPP.js",
-        "/box2boxAngular/styles-EPQX2RZT.css"
+        "/box2boxAngular/styles-SAPZ2FJQ.css"
       ],
       "patterns": []
     },
@@ -78,18 +78,18 @@
     "/box2boxAngular/assets/mdi.svg": "6f03145d7236a998cef9e6b32701a080c6a2ba37",
     "/box2boxAngular/assets/version.json": "9334e803f5cb29d67af31ee3a5805a73021408ef",
     "/box2boxAngular/assets/watermark.png": "5264b331b5c9c80a1689d201e5581e1940b8f672",
-    "/box2boxAngular/chunk-3CTQMKFP.js": "80e2e92c034962160db0f41e5dcd46a3232a99ce",
-    "/box2boxAngular/chunk-4OET5RPO.js": "65305a7d2a0003362833f3c9a4b463d392337b48",
-    "/box2boxAngular/chunk-5B4M6U5J.js": "42a8a3b17cb0b1fc5ca863568d88a5f91dfdf713",
+    "/box2boxAngular/chunk-6TVKJG7X.js": "2dc00ab936a2b15adc4d75344e88d4f4d05af203",
+    "/box2boxAngular/chunk-7DOWAOHZ.js": "a3081a957aaccd0c0aaea048a616b38d24d6f43e",
+    "/box2boxAngular/chunk-AMPK5AGD.js": "fbfe592b4a393d289f0174102a09eacc32cc60c0",
     "/box2boxAngular/chunk-PT2JM3JA.js": "9dc35024c3d9a08bb348b817b8548d8be75e16d5",
-    "/box2boxAngular/chunk-SR6INIW2.js": "e601977513e2fee27f7c972e570c5795a84d8d28",
     "/box2boxAngular/chunk-SV2CK4FE.js": "a6c83275dbaed6ab3e59ed1ec42b421b3702385b",
+    "/box2boxAngular/chunk-V2HIS6HA.js": "77ebcbdb1e762649f1070795417d57822327cefd",
     "/box2boxAngular/chunk-YNJOUGYY.js": "861b7f52f4e0bf4b645014021355bb564468f384",
-    "/box2boxAngular/chunk-ZD36QQXX.js": "f316dcf712ae4b262011d9bb61c114e4a3f28cbc",
-    "/box2boxAngular/index.html": "a67a0d4c67564dcaec0ef2498f7c65200bc2670c",
-    "/box2boxAngular/main-I5SMEJ6L.js": "8d501c1944debf6c6a4555e417d952cf88b31763",
+    "/box2boxAngular/chunk-Z7P5J3CC.js": "a7e41a6354628be214e4ea56795fee19541efab2",
+    "/box2boxAngular/index.html": "abf1f19c52ef0436ec9532d425b7ae6743be7470",
+    "/box2boxAngular/main-QK7OCLDL.js": "75e6a85cbbeb41825d62d5f62399b58ad8be3eb9",
     "/box2boxAngular/polyfills-5CFQRCPP.js": "f2241e9a25858f895ce299d15f6f22e849e2fd72",
-    "/box2boxAngular/styles-EPQX2RZT.css": "d91bf3c3947b6894b94ec43dd26144127e691128"
+    "/box2boxAngular/styles-SAPZ2FJQ.css": "88746a20f46925170a53190a7472007e74794481"
   },
   "navigationUrls": [
     {
