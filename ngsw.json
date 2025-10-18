@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1760806405031,
+  "timestamp": 1760806645240,
   "index": "/box2boxAngular/index.html",
   "assetGroups": [
     {
@@ -15,12 +15,12 @@
         "/box2boxAngular/chunk-5SPU6X7E.js",
         "/box2boxAngular/chunk-DWUFEOFB.js",
         "/box2boxAngular/chunk-EYMY6AZV.js",
-        "/box2boxAngular/chunk-GKN6VBSV.js",
         "/box2boxAngular/chunk-PT2JM3JA.js",
         "/box2boxAngular/chunk-SV2CK4FE.js",
+        "/box2boxAngular/chunk-TCARS6K2.js",
         "/box2boxAngular/chunk-YNJOUGYY.js",
         "/box2boxAngular/index.html",
-        "/box2boxAngular/main-6YOZBBXW.js",
+        "/box2boxAngular/main-WOHEUDFN.js",
         "/box2boxAngular/polyfills-5CFQRCPP.js",
         "/box2boxAngular/styles-SAPZ2FJQ.css"
       ],
@@ -82,12 +82,12 @@
     "/box2boxAngular/chunk-5SPU6X7E.js": "6328bd2d0c5379cb8fce637a5898c941d889b52d",
     "/box2boxAngular/chunk-DWUFEOFB.js": "fdda1c2356e59c35a743ddb85456b8404db0a153",
     "/box2boxAngular/chunk-EYMY6AZV.js": "d0d233152b11505c01498a4f290a1aa4619edb23",
-    "/box2boxAngular/chunk-GKN6VBSV.js": "f7bae930e08ea966d3462d134a842f4d22c05ac2",
     "/box2boxAngular/chunk-PT2JM3JA.js": "9dc35024c3d9a08bb348b817b8548d8be75e16d5",
     "/box2boxAngular/chunk-SV2CK4FE.js": "a6c83275dbaed6ab3e59ed1ec42b421b3702385b",
+    "/box2boxAngular/chunk-TCARS6K2.js": "c51f1449c78520dbeea1fcfcd0b07212eba50b1f",
     "/box2boxAngular/chunk-YNJOUGYY.js": "861b7f52f4e0bf4b645014021355bb564468f384",
-    "/box2boxAngular/index.html": "24424b322e9c33ec60a5229f15d4880fdea7472b",
-    "/box2boxAngular/main-6YOZBBXW.js": "ac94b8a116ef10ddca762d2b0256f7afef525bd1",
+    "/box2boxAngular/index.html": "50fff44415f145dfa247978ed8a9670c68c2dd41",
+    "/box2boxAngular/main-WOHEUDFN.js": "bda3b2b6a1ae45b502394ac3a7e9973c2aab9315",
     "/box2boxAngular/polyfills-5CFQRCPP.js": "f2241e9a25858f895ce299d15f6f22e849e2fd72",
     "/box2boxAngular/styles-SAPZ2FJQ.css": "88746a20f46925170a53190a7472007e74794481"
   },
